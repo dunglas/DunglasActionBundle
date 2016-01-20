@@ -44,8 +44,10 @@ final class TestKernel extends Kernel
     {
         // Specify explicitly the controller
         $routes->add('/', 'action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
-        // Use the @Route annotation of SensioExtraFrameworkBundle
-        $routes->import('@TestBundle/Action/', '/', 'annotation');
+        // Use the @Route annotation
+        $routes->import('@TestBundle/Action/', '/', 'action-annotation');
+        // Cohabitation between old school controllers and actions
+        $routes->import('@TestBundle/Controller/', '/', 'annotation');
     }
 
     /**

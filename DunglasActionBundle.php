@@ -31,12 +31,12 @@ final class DunglasActionBundle extends Bundle
         }
 
         // Service names are similar to https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/master/Resources/config/routing.xml on purpose
-        $annotDirDefinition = $container->register('dunglas_action.routing.loader.annot_dir', 'Symfony\Component\Routing\Loader\AnnotationDirectoryLoader');
+        $annotDirDefinition = $container->register('dunglas_action.routing.loader.annot_dir', 'Dunglas\ActionBundle\Routing\AnnotationDirectoryLoader');
         $annotDirDefinition->setPublic(false);
         $annotDirDefinition->setArguments([new Reference('file_locator'), new Reference('dunglas_action.routing.loader.annot_class')]);
         $annotDirDefinition->addTag('routing.loader');
 
-        $annotFileDefinition = $container->register('dunglas_action.routing.loader.annot_file', 'Symfony\Component\Routing\Loader\AnnotationFileLoader');
+        $annotFileDefinition = $container->register('dunglas_action.routing.loader.annot_file', 'Dunglas\ActionBundle\Routing\AnnotationFileLoader');
         $annotFileDefinition->setPublic(false);
         $annotFileDefinition->setArguments([new Reference('file_locator'), new Reference('dunglas_action.routing.loader.annot_class')]);
         $annotFileDefinition->addTag('routing.loader');

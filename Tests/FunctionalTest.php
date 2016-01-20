@@ -58,4 +58,12 @@ class FunctionalTest extends WebTestCase
         $crawler = $client->request('GET', '/second');
         $this->assertSame('second', $crawler->text());
     }
+
+    public function testLegacy()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/legacy');
+        $this->assertSame('Legacy here.', $crawler->text());
+    }
 }

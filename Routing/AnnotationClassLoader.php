@@ -32,6 +32,6 @@ class AnnotationClassLoader extends BaseAnnotationClassLoader
      */
     public function supports($resource, $type = null)
     {
-        return parent::supports($resource, $type) && false !== strpos($resource, '\Action');
+        return 'action-annotation' === $type && parent::supports($resource) && false !== strpos($resource, '\Action');
     }
 }

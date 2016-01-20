@@ -45,7 +45,7 @@ Optional: to use the `@Route` annotation add the following lines in `app/config/
 ```yaml
 app:
     resource: '@AppBundle/Action/'
-    type:     annotation
+    type:     'action-annotation'
 ```
 
 ## Usage
