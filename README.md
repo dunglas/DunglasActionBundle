@@ -120,10 +120,15 @@ services:
 This bundle also hooks into the Routing Component (if it is available): when the `@Route` annotation is used like in the
 example, the route is automatically registered (the bundle guesses the service to map with the given URL).
 
+You want to see more examples including using custom services with ease (no configuration at all) and a typical controller
+containing several actions?
+[Take a look at the TestBundle](Tests/Fixtures/TestBundle).
+
 ## Using the Symfony Micro Framework
 
 You might be interested to see how this bundle can be used together with [the Symfony "Micro" framework](https://symfony.com/doc/current/cookbook/configuration/micro-kernel-trait.html).
-Checkout this example:
+
+Here we go:
 
 ```php
 // MyMicroKernel.php
@@ -161,6 +166,8 @@ final class MyMicroKernel extends Kernel
 ```
 
 Amazing isn't it?
+
+Want to see a more advanced example? [Checkout our TestKernel](Tests/Fixtures/TestKernel.php).
 
 ## Using SensioFrameworkExtraBundle
 
