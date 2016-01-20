@@ -7,9 +7,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\ActionBundle\Tests\TestBundle\Action;
+namespace Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action;
 
-use Dunglas\ActionBundle\Tests\TestBundle\DummyService;
+use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\DummyService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

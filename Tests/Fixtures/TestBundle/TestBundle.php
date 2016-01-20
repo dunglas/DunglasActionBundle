@@ -7,14 +7,13 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\ActionBundle\Tests\TestBundle;
+namespace Dunglas\ActionBundle\Tests\Fixtures\TestBundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class DummyService
+final class TestBundle extends Bundle
 {
-    public function doSomething()
-    {
-    }
 }

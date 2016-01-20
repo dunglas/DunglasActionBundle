@@ -5,7 +5,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.6/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="Tests/bootstrap.php"
 >
     <php>
         <ini name="error_reporting" value="-1" />
@@ -18,7 +18,7 @@
     </testsuites>
 
     <php>
-        <server name="KERNEL_DIR" value="Tests/" />
+        <server name="KERNEL_DIR" value="Tests/Fixtures/" />
     </php>
 
     <filter>

@@ -2,7 +2,7 @@
   "name": "dunglas/action-bundle",
   "type": "symfony-bundle",
   "description": "Symfony controllers, rethinked",
-  "keywords": ["Symfony", "controllers", "action", "autowiring"],
+  "keywords": ["Symfony", "controllers", "action", "autowiring", "routing"],
   "homepage": "https://dunglas.fr",
   "license": "MIT",
   "authors": [
@@ -19,7 +19,12 @@
   },
   "require-dev": {
     "symfony/framework-bundle": "~2.8|~3.0",
-    "symfony/browser-kit": "~2.8|~3.0"
+    "symfony/browser-kit": "~2.8|~3.0",
+    "symfony/expression-language": "~2.8|~3.0",
+    "sensio/framework-extra-bundle": "~3.0"
+  },
+  "suggest": {
+    "symfony/routing": "To use the @Route annotation provided by the bundle."
   },
   "autoload": {
     "psr-4": { "Dunglas\\ActionBundle\\": "" },
