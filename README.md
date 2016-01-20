@@ -4,7 +4,7 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7022bce4-9d67-4ade-9b19-cf7e417c0a80/mini.png)](https://insight.sensiolabs.com/projects/7022bce4-9d67-4ade-9b19-cf7e417c0a80)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/?branch=master)
 
-This bundle is replacement for the standard Symfony controller system.
+This bundle is a replacement for [the standard controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
 
 It is as convenient as the system shipped with the framework but doesn't have its drawbacks:
 
@@ -21,7 +21,7 @@ See https://github.com/symfony/symfony/pull/16863#issuecomment-162221353 for the
 
 ## Installation
 
-Use [Composer](http://getcomposer.org/) to install this bundle:
+Use [Composer](https://getcomposer.org/) to install this bundle:
 
     composer require dunglas/action-bundle
 
@@ -173,7 +173,7 @@ Want to see a more advanced example? [Checkout our TestKernel](Tests/Fixtures/Te
 
 **Caution**: why do you want to do that? If you don't know, use the standard annotation as previously explained!
 
-If you want to use [the `@Route` annotation provided by SensioFrameworkExtraBundle](http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html),
+If you want to use [the `@Route` annotation provided by SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html),
 adapt the previous action class like the following:
 
 ```php
