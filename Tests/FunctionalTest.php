@@ -39,4 +39,12 @@ class FunctionalTest extends WebTestCase
         $crawler = $client->request('GET', '/annotation');
         $this->assertSame('Hey, ho, let\'s go!', $crawler->text());
     }
+
+    public function testOverrideAction()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/override');
+        $this->assertSame('Override', $crawler->text());
+    }
 }

@@ -50,7 +50,7 @@ app:
 
 ## Usage
 
-1. Creates [an invokable class](http://www.lornajane.net/posts/2012/phps-magic-__invoke-method-and-the-callable-typehint)
+1. Create [an invokable class](http://www.lornajane.net/posts/2012/phps-magic-__invoke-method-and-the-callable-typehint)
    in the `Action` directory of your bundle:
 
 ```php
@@ -104,6 +104,18 @@ For instance, the class in the example is automatically registered with the name
 
 Thanks to the autowiring feature of the Symfony Dependency Injection component, you can just typehint dependencies
 you need in the contructor, they will be automatically injected.
+
+You can override the service definition if you want (or need) to disable the autowiring:
+
+```yaml
+# app/config/services.yml
+
+services:
+    # This is a custom service definition
+    'action.AppBundle\Action\MyAction':
+        class: 'AppBundle\Action\MyAction'
+        arguments: [ '@router', '@twig' ]
+```
 
 This bundle also hooks into the Routing Component (if it is available): when the `@Route` annotation is used like in the
 example, the route is automatically registered (the bundle guesses the service to map with the given URL).

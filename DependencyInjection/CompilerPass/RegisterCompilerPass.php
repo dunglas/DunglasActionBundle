@@ -37,7 +37,13 @@ final class RegisterCompilerPass implements CompilerPassInterface
             }
 
             foreach ($this->getClasses($actionDirectory) as $className) {
-                $definition = $container->register('action.'.$className, $className);
+                $id = 'action.'.$className;
+
+                if ($container->has($id)) {
+                    continue;
+                }
+
+                $definition = $container->register($id, $className);
                 $definition->setAutowired(true);
             }
         }
