@@ -8,11 +8,11 @@ This bundle is replacement for the standard Symfony controller system.
 
 It is as convenient as the system shipped with the framework but doesn't have its drawbacks:
 
-* Only one action per class thanks to the [`__invoke()`](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
-  method
 * Action classes are automatically registered as services by the bundle
 * Dependencies of action classes are **explicitly** injected in the constructor (no more ugly access to the service container)
 * Dependencies of action classes are [autowired](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
+* Only one action per class thanks to the [`__invoke()`](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
+  method (but you're still free to create classes with more than 1 action if you want to)
 
 It allows to create **reusable**, **framework agnostic** (especially when used with [the PSR-7 bridge](https://dunglas.fr/2015/06/using-psr-7-in-symfony/))
 and **easy to unit test** actions.
@@ -32,11 +32,11 @@ Add the bundle in your application kernel:
 
 public function registerBundles()
 {
-    return array(
+    return [
         // ...
         new Dunglas\ActionBundle\DunglasActionBundle(),
         // ...
-    );
+    ];
 }
 ```
 
@@ -44,7 +44,7 @@ Optional: to use the `@Route` annotation add the following lines in `app/config/
 
 ```yaml
 app:
-    resource: "@AppBundle/Action/"
+    resource: '@AppBundle/Action/'
     type:     annotation
 ```
 
@@ -148,22 +148,14 @@ final class MyMicroKernel extends Kernel
 }
 ```
 
-Amazing is'nt it?
+Amazing isn't it?
 
 ## Using SensioFrameworkExtraBundle
 
 **Caution**: why do you want to do that? If you don't know, use the standard annotation as previously explained!
 
 If you want to use [the `@Route` annotation provided by SensioFrameworkExtraBundle](http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html),
-add the following lines in `app/config/routing.yml`:
-
-```yaml
-app:
-    resource: "@AppBundle/Action/"
-    type:     annotation
-```
-
-Then, you adapt your action class like the following:
+adapt the previous action class like the following:
 
 ```php
 
