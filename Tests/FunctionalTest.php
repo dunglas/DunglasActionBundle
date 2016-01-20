@@ -47,4 +47,15 @@ class FunctionalTest extends WebTestCase
         $crawler = $client->request('GET', '/override');
         $this->assertSame('Override', $crawler->text());
     }
+
+    public function testMultiController()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/first');
+        $this->assertSame('first', $crawler->text());
+
+        $crawler = $client->request('GET', '/second');
+        $this->assertSame('second', $crawler->text());
+    }
 }
