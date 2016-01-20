@@ -14,8 +14,9 @@ install:
   - copy php.ini-production php.ini /Y
   - echo date.timezone="UTC" >> php.ini
   - echo extension_dir=ext >> php.ini
+  - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
   - echo memory_limit=1G >> php.ini
-  - cd %APPVEYOR_BUILD_FOLDER%
+  - echo extension=php_openssl.dll >> php.ini
   - php -r "readfile('http://getcomposer.org/installer');" | php
   - php composer.phar install --no-interaction --no-progress
   - appveyor DownloadFile https://phar.phpunit.de/phpunit.phar
