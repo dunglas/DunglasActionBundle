@@ -13,7 +13,8 @@ It is as convenient as the system shipped with the framework but doesn't suffer 
 * Dependencies of action classes are **automatically injected** using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
 * Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
   (but you're still free to create classes with more than 1 action if you want to)
-* 100% compliant with RAD tools including `@Route`, `@Cache`, `@Template` and `@Security` annotations
+* 100% compatible with common libraries and bundles including [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/)
+  annotations
 
 DunglasActionBundle allows to create **reusable**, **framework agnostic** (especially when used with [the PSR-7 bridge](https://dunglas.fr/2015/06/using-psr-7-in-symfony/))
 and **easy to unit test** actions.
@@ -169,59 +170,6 @@ final class MyMicroKernel extends Kernel
 Amazing isn't it?
 
 Want to see a more advanced example? [Checkout our TestKernel](Tests/Fixtures/TestKernel.php).
-
-## Using SensioFrameworkExtraBundle
-
-**Caution**: why do you want to do that? If you don't know, use the standard annotation as previously explained!
-
-If you want to use [the `@Route` annotation provided by SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html),
-adapt the previous action class like the following:
-
-```php
-
-// src/AppBundle/Action/MyAction.php
-
-namespace AppBundle\Action;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
-/**
- * @Route(service="action.AppBundle\Action\MyAction")
- *
- * The service name associated with the current action is automatically assigned by the bundle.
- * Unless with the standard annotation, when you use the one provided by SensioFrameworkExtraBundle,
- * you need to indicate this service name here.
- */
-class MyAction
-{
-    private $router;
-    private $twig;
-
-    // The action is automatically registered as a service and dependencies are autowired
-    public function __construct(RouterInterface $router, \Twig_Environment $twig)
-    {
-        $this->router = $router;
-        $this->twig = $twig;
-    }
-
-    /**
-     * @Route("/myaction")
-     */
-    public function __invoke(Request $request)
-    {
-        if (!$this->request->isMethod('GET') {
-            // Redirect in GET if the method is not POST
-            return new RedirectResponse($this->router->generateUrl('my_action'), 301);
-        }
-
-        return new Response($this->twig->render('mytemplate.html.twig'));
-    }
-}
-```
 
 ## Credits
 
