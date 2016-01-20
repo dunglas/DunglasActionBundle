@@ -51,7 +51,7 @@ final class TestKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
+    protected function configureContainer(ContainerBuilder $c)
     {
         $c->loadFromExtension('framework', [
             'secret' => 'MySecretKey',
