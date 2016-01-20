@@ -91,7 +91,7 @@ class MyAction
 }
 ```
 
-2. There is not step 2! You're already done.
+**There is not step 2! You're already done.**
 
 All classes inside of the `Action` directory of your project bundles are automatically registered as services.
 By convention, those services follow this pattern: `action.The\Fully\Qualified\Class\Name`.
@@ -107,7 +107,44 @@ example, the route is automatically registered (the bundle guesses the service t
 ## Using the Symfony Micro Framework
 
 You might be interested to see how this bundle can be used together with [the Symfony "Micro" framework](https://symfony.com/doc/current/cookbook/configuration/micro-kernel-trait.html).
-Checkout [the test kernel of this bundle](Tests/TestKernel.php)!
+Checkout this example:
+
+```php
+// MyMicroKernel.php
+
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\RouteCollectionBuilder;
+
+final class MyMicroKernel extends Kernel
+{
+    use MicroKernelTrait;
+
+    public function registerBundles()
+    {
+        return [
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new Dunglas\ActionBundle\DunglasActionBundle(),
+            new AppBundle\AppBundle(),
+        ];
+    }
+
+    protected function configureRoutes(RouteCollectionBuilder $routes)
+    {
+        // Specify explicitly the controller
+        $routes->add('/', 'action.AppBundle\Action\MyAction', 'my_route');
+    }
+
+    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
+    {
+        $c->loadFromExtension('framework', ['secret' => 'MySecretKey']);
+    }
+}
+```
+
+Amazing is'nt it?
 
 ## Using SensioFrameworkExtraBundle
 
