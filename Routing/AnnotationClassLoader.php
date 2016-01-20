@@ -19,11 +19,17 @@ use Symfony\Component\Routing\Route;
  */
 class AnnotationClassLoader extends BaseAnnotationClassLoader
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
         $route->setDefault('_controller', 'action.'.$class->name.':'.$method->name);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($resource, $type = null)
     {
         return parent::supports($resource, $type) && false !== strpos($resource, '\Action');

@@ -6,7 +6,7 @@
 
 This bundle is a replacement for [the standard controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
 
-It is as convenient as the system shipped with the framework but doesn't suffer but fixes its drawbacks.
+It is as convenient as the system shipped with the framework but doesn't suffer from its drawbacks.
 
 * Action classes are automatically **registered as services** by the bundle
 * Dependencies of action classes are **explicitly** injected in the constructor (no more ugly access to the service container)
