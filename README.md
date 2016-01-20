@@ -13,8 +13,9 @@ It is as convenient as the system shipped with the framework but doesn't suffer 
 * Dependencies of action classes are **automatically injected** using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
 * Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
   (but you're still free to create classes with more than 1 action if you want to)
+* 100% compliant with RAD tools including `@Route`, `@Cache`, `@Template` and `@Security` annotations
 
-It allows to create **reusable**, **framework agnostic** (especially when used with [the PSR-7 bridge](https://dunglas.fr/2015/06/using-psr-7-in-symfony/))
+DunglasActionBundle allows to create **reusable**, **framework agnostic** (especially when used with [the PSR-7 bridge](https://dunglas.fr/2015/06/using-psr-7-in-symfony/))
 and **easy to unit test** actions.
 
 See https://github.com/symfony/symfony/pull/16863#issuecomment-162221353 for the history behind this bundle.
@@ -80,8 +81,8 @@ class MyAction
     /**
      * @Route("/myaction")
      *
-     * Using annotations are not mandatory, you can use XML or YAML routing file if you want.
-     * If you want a framework agnostic action, don't use this annotation.
+     * Using annotations are not mandatory, XML and YAML configuration files can be used instead.
+     * If you want to make your actions framework agnostic, don't use annotations.
      */
     public function __invoke(Request $request)
     {
