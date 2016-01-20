@@ -6,13 +6,13 @@
 
 This bundle is a replacement for [the standard controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
 
-It is as convenient as the system shipped with the framework but doesn't have its drawbacks:
+It is as convenient as the system shipped with the framework but doesn't suffer but fixes its drawbacks.
 
-* Action classes are automatically registered as services by the bundle
+* Action classes are automatically **registered as services** by the bundle
 * Dependencies of action classes are **explicitly** injected in the constructor (no more ugly access to the service container)
-* Dependencies of action classes are [autowired](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
-* Only one action per class thanks to the [`__invoke()`](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
-  method (but you're still free to create classes with more than 1 action if you want to)
+* Dependencies of action classes are **automatically injected** using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
+* Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
+  (but you're still free to create classes with more than 1 action if you want to)
 
 It allows to create **reusable**, **framework agnostic** (especially when used with [the PSR-7 bridge](https://dunglas.fr/2015/06/using-psr-7-in-symfony/))
 and **easy to unit test** actions.
