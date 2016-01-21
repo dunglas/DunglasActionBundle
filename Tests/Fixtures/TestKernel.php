@@ -57,7 +57,7 @@ final class TestKernel extends Kernel
     {
         $c->loadFromExtension('framework', [
             'secret' => 'MySecretKey',
-            'test' => null,
+            'test'   => null,
         ]);
 
         $c->register('action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
