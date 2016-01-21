@@ -92,7 +92,7 @@ class MyAction
      */
     public function __invoke(Request $request)
     {
-        if (!$this->request->isMethod('GET') {
+        if (!$request->isMethod('GET') {
             // Redirect in GET if the method is not POST
             return new RedirectResponse($this->router->generateUrl('my_action'), 301);
         }
