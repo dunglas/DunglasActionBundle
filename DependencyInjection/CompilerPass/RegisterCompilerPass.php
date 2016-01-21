@@ -47,7 +47,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
      *
      * @param string $actionDirectory
      *
-     * @return string
+     * @return string[]
      */
     private function getClasses($actionDirectory)
     {
@@ -77,6 +77,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
         foreach ($declared as $className) {
             $reflectionClass = new \ReflectionClass($className);
             $sourceFile = $reflectionClass->getFileName();
+
             if (isset($includedFiles[$sourceFile])) {
                 $classes[$className] = true;
             }
