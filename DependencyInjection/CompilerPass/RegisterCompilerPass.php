@@ -27,19 +27,47 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        $directories = [];
+        $kernelRootDir = $container->getParameter('kernel.root_dir');
+
+        foreach ($container->getParameter('dunglas_action.directories') as $directory) {
+            $directories[] = $kernelRootDir.DIRECTORY_SEPARATOR.$directory;
+        }
+
+        if ($container->getParameter('dunglas_action.autodiscover.enabled')) {
+            $directories = array_merge($directories, $this->getAutodiscoveredDirectories($container, $container->getParameter('dunglas_action.autodiscover.directory')));
+        }
+
+        foreach ($directories as $directory) {
+            foreach ($this->getClasses($directory) as $class) {
+                $this->registerClass($container, $class);
+            }
+        }
+    }
+
+    /**
+     * Gets the list of directories to autodiscover.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $directory
+     *
+     * @return array
+     */
+    private function getAutodiscoveredDirectories(ContainerBuilder $container, $directory)
+    {
+        $directories = [];
+
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflectionClass = new \ReflectionClass($bundle);
             $bundleDirectory = dirname($reflectionClass->getFileName());
-            $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.'Action';
+            $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.$directory;
 
-            if (!file_exists($actionDirectory)) {
-                continue;
-            }
-
-            foreach ($this->getClasses($actionDirectory) as $className) {
-                $this->registerClass($container, $className);
+            if (file_exists($actionDirectory)) {
+                $directories[] = $actionDirectory;
             }
         }
+
+        return $directories;
     }
 
     /**

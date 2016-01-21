@@ -177,6 +177,18 @@ Amazing isn't it?
 
 Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixtures/TestKernel.php).
 
+## Configuration
+
+```yaml
+# app/config/config.yml
+
+dunglas_action:
+    autodiscover:         # Autodiscover action classes stored in the configured directory of bundles and register them as service.
+        enabled:   true
+        directory: Action # The directory name to autodiscover in bundles.
+    directories:   []     # List of directories relative to the kernel root directory containing action classes.
+```
+
 ## Credits
 
 This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and is sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
