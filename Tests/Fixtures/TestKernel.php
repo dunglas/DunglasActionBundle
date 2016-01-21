@@ -44,8 +44,11 @@ final class TestKernel extends Kernel
     {
         // Specify explicitly the controller
         $routes->add('/', 'action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
+        $routes->add('/isolated', 'action.Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
+
         // Use the @Route annotation
         $routes->import('@TestBundle/Action/', '/', 'action-annotation');
+
         // Cohabitation between old school controllers and actions
         $routes->import('@TestBundle/Controller/', '/', 'annotation');
     }
@@ -57,7 +60,11 @@ final class TestKernel extends Kernel
     {
         $c->loadFromExtension('framework', [
             'secret' => 'MySecretKey',
-            'test'   => null,
+            'test' => null,
+        ]);
+
+        $c->loadFromExtension('dunglas_action', [
+            'directories' => ['IsolatedAction'],
         ]);
 
         $c->register('action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
