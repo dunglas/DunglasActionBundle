@@ -1,16 +1,16 @@
-# DunglasActionBundle: Symfony controllers, rethinked
+# DunglasActionBundle: Symfony controllers, redesigned
 
 [![Build Status](https://travis-ci.org/dunglas/DunglasActionBundle.svg?branch=master)](https://travis-ci.org/dunglas/DunglasActionBundle)
 [![Build status](https://ci.appveyor.com/api/projects/status/jpjsasx59syknghe?svg=true)](https://ci.appveyor.com/project/dunglas/dunglasactionbundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7022bce4-9d67-4ade-9b19-cf7e417c0a80/mini.png)](https://insight.sensiolabs.com/projects/7022bce4-9d67-4ade-9b19-cf7e417c0a80)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/?branch=master)
 
-This bundle is a replacement for [the standard controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
+This bundle is a replacement for [the controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
 
-It is as convenient as the system shipped with the framework but doesn't suffer from its drawbacks.
+It is as convenient as the original but doesn't suffer from its drawbacks:
 
 * Action classes are automatically **registered as services** by the bundle
-* Dependencies of action classes are **explicitly** injected in the constructor (no more ugly access to the service container)
+* Dependencies of action classes are **explicitly* injected** in the constructor (no more ugly access to the service container)
 * Dependencies of action classes are **automatically injected** using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
 * Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
   (but you're still free to create classes with more than 1 action if you want to)
@@ -46,7 +46,7 @@ public function registerBundles()
 Optional: to use the `@Route` annotation add the following lines in `app/config/routing.yml`:
 
 ```yaml
-app:
+app_action:
     resource: '@AppBundle/Action/'
     type:     'action-annotation'
 ```
@@ -54,7 +54,7 @@ app:
 ## Usage
 
 1. Create [an invokable class](http://www.lornajane.net/posts/2012/phps-magic-__invoke-method-and-the-callable-typehint)
-   in the `Action` directory of your bundle:
+   in the `Action\` namespace of your bundle:
 
 ```php
 
@@ -73,7 +73,10 @@ class MyAction
     private $router;
     private $twig;
 
-    // The action is automatically registered as a service and dependencies are autowired
+    /**
+     * The action is automatically registered as a service and dependencies are autowired.
+     * Typehint any service you need, it will be automatically injected.
+     */
     public function __construct(RouterInterface $router, \Twig_Environment $twig)
     {
         $this->router = $router;
@@ -81,10 +84,10 @@ class MyAction
     }
 
     /**
-     * @Route("/myaction")
+     * @Route("/myaction", name="my_action")
      *
-     * Using annotations are not mandatory, XML and YAML configuration files can be used instead.
-     * If you want to make your actions framework agnostic, don't use annotations.
+     * Using annotations is not mandatory, XML and YAML configuration files can be used instead.
+     * If you want to decouple your actions from the framework, don't use annotations.
      */
     public function __invoke(Request $request)
     {
@@ -100,15 +103,15 @@ class MyAction
 
 **There is not step 2! You're already done.**
 
-All classes inside of the `Action` directory of your project bundles are automatically registered as services.
+All classes inside of the `Action/` directory of your project bundles are automatically registered as services.
 By convention, those services follow this pattern: `action.The\Fully\Qualified\Class\Name`.
 
 For instance, the class in the example is automatically registered with the name `action.AppBundle\Action\MyAction`.
 
-Thanks to the autowiring feature of the Symfony Dependency Injection component, you can just typehint dependencies
-you need in the contructor, they will be automatically injected.
+Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
+Component, you can just typehint dependencies you need in the constructor, they will be automatically injected.
 
-You can override the service definition if you want (or need) to disable the autowiring:
+Service definition can easily be customized by explicitly defining a service named according to the same convention:
 
 ```yaml
 # app/config/services.yml
@@ -120,12 +123,11 @@ services:
         arguments: [ '@router', '@twig' ]
 ```
 
-This bundle also hooks into the Routing Component (if it is available): when the `@Route` annotation is used like in the
-example, the route is automatically registered (the bundle guesses the service to map with the given URL).
+This bundle also hooks into the Routing Component (if it is available): when the `@Route` annotation is used as in the example,
+the route is automatically registered: the bundle guesses the service to map with the path specified in the annotation.
 
-You want to see more examples including using custom services with ease (no configuration at all) and a typical controller
-containing several actions?
-[Take a look at the TestBundle](Tests/Fixtures/TestBundle).
+[Dive into the TestBundle](Tests/Fixtures/TestBundle) to discover more examples such as using custom services with ease
+(no configuration at all) or classes containing several actions.
 
 ## Using the Symfony Micro Framework
 
@@ -159,6 +161,8 @@ final class MyMicroKernel extends Kernel
     {
         // Specify explicitly the controller
         $routes->add('/', 'action.AppBundle\Action\MyAction', 'my_route');
+        // Alternatively, use @Route annotations
+        // $routes->import('@AppBundle/Action/', '/', 'action-annotation');
     }
 
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
@@ -170,8 +174,8 @@ final class MyMicroKernel extends Kernel
 
 Amazing isn't it?
 
-Want to see a more advanced example? [Checkout our TestKernel](Tests/Fixtures/TestKernel.php).
+Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixtures/TestKernel.php).
 
 ## Credits
 
-This bundle has been written by [Kévin Dunglas](https://dunglas.fr) and is sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and is sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
