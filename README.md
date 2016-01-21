@@ -4,6 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/jpjsasx59syknghe?svg=true)](https://ci.appveyor.com/project/dunglas/dunglasactionbundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/7022bce4-9d67-4ade-9b19-cf7e417c0a80/mini.png)](https://insight.sensiolabs.com/projects/7022bce4-9d67-4ade-9b19-cf7e417c0a80)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/?branch=master)
+[![StyleCI](https://styleci.io/repos/50048652/shield)](https://styleci.io/repos/50048652)
 
 This bundle is a replacement for [the controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
 
