@@ -11,7 +11,7 @@ This bundle is a replacement for [the controller system](https://symfony.com/doc
 It is as convenient as the original but doesn't suffer from its drawbacks:
 
 * Action classes are automatically **registered as services** by the bundle
-* Dependencies of action classes are **explicitly* injected** in the constructor (no more ugly access to the service container)
+* Dependencies of action classes are **explicitly injected** in the constructor (no more ugly access to the service container)
 * Dependencies of action classes are **automatically injected** using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
 * Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
   (but you're still free to create classes with more than 1 action if you want to)
