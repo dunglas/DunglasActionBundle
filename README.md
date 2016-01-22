@@ -102,7 +102,7 @@ class MyAction
 }
 ```
 
-**There is not step 2! You're already done.**
+**There is no step 2! You're already done.**
 
 All classes inside of the `Action/` directory of your project bundles are automatically registered as services.
 By convention, those services follow this pattern: `action.The\Fully\Qualified\Class\Name`.
