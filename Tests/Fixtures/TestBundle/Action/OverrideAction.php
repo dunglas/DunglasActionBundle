@@ -18,7 +18,7 @@ class OverrideAction
     public function __construct(DummyService $dummyService = null)
     {
         if (null !== $dummyService) {
-            throw new \InvalidArgumentException('$dummyService must be must be null!');
+            throw new \InvalidArgumentException('$dummyService must be null!');
         }
     }
 
