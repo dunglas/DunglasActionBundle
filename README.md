@@ -92,7 +92,7 @@ class MyAction
      */
     public function __invoke(Request $request)
     {
-        if (!$request->isMethod('GET') {
+        if (!$request->isMethod('GET')) {
             // Redirect to the current URL using the the GET method if it's not the current one
             return new RedirectResponse($this->router->generateUrl('my_action'), 301);
         }
