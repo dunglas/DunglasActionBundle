@@ -27,47 +27,28 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $directories = [];
-        $kernelRootDir = $container->getParameter('kernel.root_dir');
+        $this->registerActions($container);
+        $this->registerCommands($container);
+    }
 
-        foreach ($container->getParameter('dunglas_action.directories') as $directory) {
-            $directories[] = $kernelRootDir.DIRECTORY_SEPARATOR.$directory;
-        }
-
-        if ($container->getParameter('dunglas_action.autodiscover.enabled')) {
-            $directories = array_merge($directories, $this->getAutodiscoveredDirectories($container, $container->getParameter('dunglas_action.autodiscover.directory')));
-        }
+    private function registerActions(ContainerBuilder $container) {
+        $directories = $container->getParameter('dunglas_action.actions.directories');
 
         foreach ($directories as $directory) {
             foreach ($this->getClasses($directory) as $class) {
-                $this->registerClass($container, $class);
+                $this->registerClass($container, 'action', $class);
             }
         }
     }
 
-    /**
-     * Gets the list of directories to autodiscover.
-     *
-     * @param ContainerBuilder $container
-     * @param string           $directory
-     *
-     * @return array
-     */
-    private function getAutodiscoveredDirectories(ContainerBuilder $container, $directory)
-    {
-        $directories = [];
+    private function registerCommands(ContainerBuilder $container) {
+        $directories = $container->getParameter('dunglas_action.commands.directories');
 
-        foreach ($container->getParameter('kernel.bundles') as $bundle) {
-            $reflectionClass = new \ReflectionClass($bundle);
-            $bundleDirectory = dirname($reflectionClass->getFileName());
-            $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.$directory;
-
-            if (file_exists($actionDirectory)) {
-                $directories[] = $actionDirectory;
+        foreach ($directories as $directory) {
+            foreach ($this->getClasses($directory) as $class) {
+                $this->registerClass($container, 'command', $class);
             }
         }
-
-        return $directories;
     }
 
     /**
@@ -120,9 +101,9 @@ final class RegisterCompilerPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      * @param string           $className
      */
-    private function registerClass(ContainerBuilder $container, $className)
+    private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
-        $id = 'action.'.$className;
+        $id = sprintf('%s.%s', $prefix, $className);
 
         if ($container->has($id)) {
             return;
