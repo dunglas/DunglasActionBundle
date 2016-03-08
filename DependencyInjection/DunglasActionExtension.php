@@ -30,7 +30,7 @@ class DunglasActionExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('dunglas_action.autodiscover.enabled', $config['autodiscover']['enabled']);
-        $container->setParameter('dunglas_action.autodiscover.directory', $config['autodiscover']['directory']);
+        $container->setParameter('dunglas_action.autodiscover.directories', $config['autodiscover']['directories']);
         $container->setParameter('dunglas_action.directories', $config['directories']);
 
         if (class_exists('Symfony\Component\Routing\Loader\AnnotationDirectoryLoader')) {

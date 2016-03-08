@@ -30,17 +30,28 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $directories = [];
         $kernelRootDir = $container->getParameter('kernel.root_dir');
 
-        foreach ($container->getParameter('dunglas_action.directories') as $directory) {
-            $directories[] = $kernelRootDir.DIRECTORY_SEPARATOR.$directory;
+        foreach ($container->getParameter('dunglas_action.directories') as $prefix => $dirs) {
+            $directories[$prefix] = [];
+            foreach ($dirs as $directory) {
+                $directories[$prefix][] = $kernelRootDir.DIRECTORY_SEPARATOR.$directory;
+            }
         }
 
         if ($container->getParameter('dunglas_action.autodiscover.enabled')) {
-            $directories = array_merge($directories, $this->getAutodiscoveredDirectories($container, $container->getParameter('dunglas_action.autodiscover.directory')));
+            foreach ($container->getParameter('dunglas_action.autodiscover.directories') as $prefix => $dirs) {
+                if (!isset($directories[$prefix])) {
+                    $directories[$prefix] = [];
+                }
+
+                $directories[$prefix] = array_merge($directories[$prefix], $this->getAutodiscoveredDirectories($container, $dirs));
+            }
         }
 
-        foreach ($directories as $directory) {
-            foreach ($this->getClasses($directory) as $class) {
-                $this->registerClass($container, $class);
+        foreach ($directories as $prefix => $dirs) {
+            foreach ($dirs as $directory) {
+                foreach ($this->getClasses($directory) as $class) {
+                    $this->registerClass($container, $prefix, $class);
+                }
             }
         }
     }
@@ -49,21 +60,23 @@ final class RegisterCompilerPass implements CompilerPassInterface
      * Gets the list of directories to autodiscover.
      *
      * @param ContainerBuilder $container
-     * @param string           $directory
+     * @param string[]         $dirs
      *
      * @return array
      */
-    private function getAutodiscoveredDirectories(ContainerBuilder $container, $directory)
+    private function getAutodiscoveredDirectories(ContainerBuilder $container, $dirs)
     {
         $directories = [];
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflectionClass = new \ReflectionClass($bundle);
             $bundleDirectory = dirname($reflectionClass->getFileName());
-            $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.$directory;
+            foreach ($dirs as $directory) {
+                $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.$directory;
 
-            if (file_exists($actionDirectory)) {
-                $directories[] = $actionDirectory;
+                if (file_exists($actionDirectory)) {
+                    $directories[] = $actionDirectory;
+                }
             }
         }
 
@@ -120,9 +133,9 @@ final class RegisterCompilerPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      * @param string           $className
      */
-    private function registerClass(ContainerBuilder $container, $className)
+    private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
-        $id = 'action.'.$className;
+        $id = sprintf('%s.%s', $prefix, $className);
 
         if ($container->has($id)) {
             return;
@@ -130,5 +143,9 @@ final class RegisterCompilerPass implements CompilerPassInterface
 
         $definition = $container->register($id, $className);
         $definition->setAutowired(true);
+
+        if ('command' === $prefix) {
+            $definition->addTag('console.command');
+        }
     }
 }

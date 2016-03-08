@@ -185,7 +185,9 @@ Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixt
 dunglas_action:
     autodiscover:         # Autodiscover action classes stored in the configured directory of bundles and register them as service.
         enabled:   true
-        directory: Action # The directory name to autodiscover in bundles.
+        directories: # The directories name to autodiscover in bundles.
+            action: [ Action ]
+            command: [ Command ]
     directories:   []     # List of directories relative to the kernel root directory containing action classes.
 ```
 
