@@ -9,6 +9,7 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -24,20 +25,36 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
+        $autodiscoverNode = new ArrayNodeDefinition('autodiscover');
+        $autodiscoverNode
+            ->info('Autodiscover classes stored in the configured directory of bundles and register them as service.')
+            ->canBeDisabled()
+            ->children()
+                ->arrayNode('directories')
+                    ->info('The directories name to autodiscover in bundles.')
+                    ->prototype('scalar')->end()
+                    ->defaultValue(['Action'])
+                ->end()
+            ->end();
+
+        $directoriesNode = new ArrayNodeDefinition('directories');
+        $directoriesNode
+            ->info('List of directories relative to the kernel root directory containing action classes.')
+            ->prototype('scalar')->end()
+            ->defaultValue([]);
+
         $treeBuilder = new TreeBuilder();
         $treeBuilder->root('dunglas_action')
             ->children()
-                ->arrayNode('autodiscover')
-                    ->info('Autodiscover action classes stored in the configured directory of bundles and register them as service.')
+                ->arrayNode('actions')
                     ->canBeDisabled()
-                    ->children()
-                        ->scalarNode('directory')->defaultValue('Action')->info('The directory name to autodiscover in bundles.')->end()
-                    ->end()
+                    ->append($autodiscoverNode)
+                    ->append($directoriesNode)
                 ->end()
-                ->arrayNode('directories')
-                    ->info('List of directories relative to the kernel root directory containing action classes.')
-                    ->prototype('scalar')->end()
-                    ->defaultValue([])
+                ->arrayNode('commands')
+                    ->canBeDisabled()
+                    ->append($autodiscoverNode)
+                    ->append($directoriesNode)
                 ->end()
             ->end()
         ->end();
