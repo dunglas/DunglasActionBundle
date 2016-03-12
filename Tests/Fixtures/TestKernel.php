@@ -64,7 +64,7 @@ final class TestKernel extends Kernel
         ]);
 
         $c->loadFromExtension('dunglas_action', [
-            'directories' => ['IsolatedAction'],
+            'directories' => ['action' => ['IsolatedAction']],
         ]);
 
         $c->register('action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');

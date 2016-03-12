@@ -23,6 +23,12 @@ final class DunglasActionBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new RegisterCompilerPass());
+        $passConfig = $container->getCompilerPassConfig();
+
+        $passes = $passConfig->getBeforeOptimizationPasses();
+
+        // This pass must be executed before AddConsoleCommandPass from the FrameworkBundle
+        array_unshift($passes, new RegisterCompilerPass());
+        $passConfig->setBeforeOptimizationPasses($passes);
     }
 }

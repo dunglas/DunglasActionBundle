@@ -11,6 +11,7 @@ namespace Dunglas\ActionBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * {@inheritdoc}
@@ -31,12 +32,27 @@ class Configuration implements ConfigurationInterface
                     ->info('Autodiscover action classes stored in the configured directory of bundles and register them as service.')
                     ->canBeDisabled()
                     ->children()
-                        ->scalarNode('directory')->defaultValue('Action')->info('The directory name to autodiscover in bundles.')->end()
+                        ->arrayNode('directories')
+                            ->info('The directory name to autodiscover in bundles.')
+                            ->prototype('array')
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->defaultValue(call_user_func(function () {
+                                $defaultValue = ['action' => ['Action']];
+                                if (class_exists(Command::class)) {
+                                    $defaultValue['command'] = ['Command'];
+                                }
+
+                                return $defaultValue;
+                            }))
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('directories')
-                    ->info('List of directories relative to the kernel root directory containing action classes.')
-                    ->prototype('scalar')->end()
+                    ->info('List of directories relative to the kernel root directory containing classes.')
+                    ->prototype('array')
+                        ->prototype('scalar')->end()
+                    ->end()
                     ->defaultValue([])
                 ->end()
             ->end()

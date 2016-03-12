@@ -6,20 +6,19 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dunglas/DunglasActionBundle/?branch=master)
 [![StyleCI](https://styleci.io/repos/50048652/shield)](https://styleci.io/repos/50048652)
 
-This bundle is a replacement for [the controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com).
+This bundle is a replacement for [the controller system](https://symfony.com/doc/current/book/controller.html) of the [Symfony framework](https://symfony.com) and for its [command system](https://symfony.com/doc/current/cookbook/console/console_command.html).
 
 It is as convenient as the original but doesn't suffer from its drawbacks:
 
-* Action classes are automatically **registered as services** by the bundle
-* Dependencies of action classes are **explicitly injected** in the constructor (no more ugly access to the service container)
-* Dependencies of action classes are **automatically injected** using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
+* Action and ``Command`` classes are automatically **registered as services** by the bundle
+* Their dependencies are **explicitly injected** in the constructor (no more ugly access to the service container) using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
 * Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
   (but you're still free to create classes with more than 1 action if you want to)
 * 100% compatible with common libraries and bundles including [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/)
   annotations
 
 DunglasActionBundle allows to create **reusable**, **framework agnostic** (especially when used with [the PSR-7 bridge](https://dunglas.fr/2015/06/using-psr-7-in-symfony/))
-and **easy to unit test** actions.
+and **easy to unit test** classes.
 
 See https://github.com/symfony/symfony/pull/16863#issuecomment-162221353 for the history behind this bundle.
 
@@ -109,6 +108,8 @@ By convention, those services follow this pattern: `action.The\Fully\Qualified\C
 
 For instance, the class in the example is automatically registered with the name `action.AppBundle\Action\MyAction`.
 
+The ``Command``s located in the `Command` directory of your bundles are registered as services as `command.The\Fully\Qualified\Class\Name`.
+
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
 Component, you can just typehint dependencies you need in the constructor, they will be automatically injected.
 
@@ -122,6 +123,12 @@ services:
     'action.AppBundle\Action\MyAction':
         class: 'AppBundle\Action\MyAction'
         arguments: [ '@router', '@twig' ]
+
+    'command.AppBundle\Command\MyCommand':
+        class: 'AppBundle\Command\MyCommand'
+        arguments: [ '@router', '@twig' ]
+        tags:
+            - { name: console.command }
 ```
 
 This bundle also hooks into the Routing Component (if it is available): when the `@Route` annotation is used as in the example,
@@ -185,8 +192,12 @@ Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixt
 dunglas_action:
     autodiscover:         # Autodiscover action classes stored in the configured directory of bundles and register them as service.
         enabled:   true
-        directory: Action # The directory name to autodiscover in bundles.
-    directories:   []     # List of directories relative to the kernel root directory containing action classes.
+        directories: # The directories name to autodiscover in bundles.
+            action: [ Action ]   # Automatically adapted in the routing
+            command: [ Command ] # Automatically tagged
+            foo: [ Foo ]         # Only registered
+    directories:         # List of directories relative to the kernel root directory containing classes to auto-register.
+        command: [ '../src/MyBundle/My/Uncommon/Directory' ]
 ```
 
 ## Credits
