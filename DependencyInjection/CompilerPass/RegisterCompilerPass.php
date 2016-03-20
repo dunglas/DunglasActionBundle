@@ -140,7 +140,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
-        if ('command' === $prefix && !is_subclass_of($className, Command::class)) {
+        if ('console' === $prefix && !is_subclass_of($className, Command::class)) {
             return;
         }
 
@@ -153,7 +153,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $definition = $container->register($id, $className);
         $definition->setAutowired(true);
 
-        if ('command' === $prefix) {
+        if ('console' === $prefix) {
             $definition->addTag('console.command');
         }
     }

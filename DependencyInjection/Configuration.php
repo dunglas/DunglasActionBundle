@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(call_user_func(function () {
                                 $defaultValue = ['action' => ['Action']];
                                 if (class_exists(Command::class)) {
-                                    $defaultValue['command'] = ['Command'];
+                                    $defaultValue['console'] = ['Console'];
                                 }
 
                                 return $defaultValue;

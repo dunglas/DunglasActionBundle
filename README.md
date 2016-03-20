@@ -10,7 +10,7 @@ This bundle is a replacement for [the controller system](https://symfony.com/doc
 
 It is as convenient as the original but doesn't suffer from its drawbacks:
 
-* Action and ``Command`` classes are automatically **registered as services** by the bundle
+* Action and console classes are automatically **registered as services** by the bundle
 * Their dependencies are **explicitly injected** in the constructor (no more ugly access to the service container) using the [autowiring feature of the Dependency Injection Component](https://dunglas.fr/2015/10/new-in-symfony-2-83-0-services-autowiring/)
 * Only one action per class thanks to the [`__invoke()` method](http://php.net/manual/en/language.oop5.magic.php#object.invoke)
   (but you're still free to create classes with more than 1 action if you want to)
@@ -108,7 +108,7 @@ By convention, those services follow this pattern: `action.The\Fully\Qualified\C
 
 For instance, the class in the example is automatically registered with the name `action.AppBundle\Action\MyAction`.
 
-The ``Command``s located in the `Command` directory of your bundles are registered as services as `command.The\Fully\Qualified\Class\Name`.
+The ``Command``s located in the `Console` directory of your bundles are registered as services as `console.The\Fully\Qualified\Class\Name`.
 
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
 Component, you can just typehint dependencies you need in the constructor, they will be automatically injected.
@@ -124,8 +124,8 @@ services:
         class: 'AppBundle\Action\MyAction'
         arguments: [ '@router', '@twig' ]
 
-    'command.AppBundle\Command\MyCommand':
-        class: 'AppBundle\Command\MyCommand'
+    'console.AppBundle\Console\MyCommand':
+        class: 'AppBundle\Console\MyCommand'
         arguments: [ '@router', '@twig' ]
         tags:
             - { name: console.command }
@@ -194,10 +194,10 @@ dunglas_action:
         enabled:   true
         directories: # The directories name to autodiscover in bundles.
             action: [ Action ]   # Automatically adapted in the routing
-            command: [ Command ] # Automatically tagged
+            console: [ Console ] # Automatically tagged
             foo: [ Foo ]         # Only registered
     directories:         # List of directories relative to the kernel root directory containing classes to auto-register.
-        command: [ '../src/MyBundle/My/Uncommon/Directory' ]
+        console: [ '../src/MyBundle/My/Uncommon/Directory' ]
 ```
 
 ## Credits
