@@ -74,4 +74,10 @@ class FunctionalTest extends WebTestCase
         $crawler = $client->request('GET', '/isolated');
         $this->assertSame('Isolated.', $crawler->text());
     }
+
+    public function testAbstractClassNotRegistered()
+    {
+        static::bootKernel();
+        $this->assertFalse(static::$kernel->getContainer()->has('action.dunglas\actionBundle\tests\fixtures\testbundle\action\abstractaction'));
+    }
 }
