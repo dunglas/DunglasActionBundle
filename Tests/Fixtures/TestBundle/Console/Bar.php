@@ -7,10 +7,8 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Command;
+namespace Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Console;
 
-use Symfony\Component\Console\Command\Command;
-
-class FooCommand extends Command
+class Bar
 {
 }
