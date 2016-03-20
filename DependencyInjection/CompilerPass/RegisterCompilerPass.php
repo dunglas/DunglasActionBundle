@@ -9,6 +9,7 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -119,6 +120,10 @@ final class RegisterCompilerPass implements CompilerPassInterface
             $reflectionClass = new \ReflectionClass($className);
             $sourceFile = $reflectionClass->getFileName();
 
+            if ($reflectionClass->isAbstract()) {
+                continue;
+            }
+
             if (isset($includedFiles[$sourceFile])) {
                 $classes[$className] = true;
             }
@@ -135,6 +140,10 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
+        if ('command' === $prefix && !is_subclass_of($className, Command::class)) {
+            return;
+        }
+
         $id = sprintf('%s.%s', $prefix, $className);
 
         if ($container->has($id)) {
