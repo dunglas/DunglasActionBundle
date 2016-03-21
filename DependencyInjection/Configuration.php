@@ -53,7 +53,6 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->prototype('scalar')->end()
                     ->end()
-                    ->defaultValue([])
                 ->end()
             ->end()
         ->end();
