@@ -27,10 +27,12 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $treeBuilder->root('dunglas_action')
+            ->fixXmlConfig('directory', 'directories')
             ->children()
                 ->arrayNode('autodiscover')
                     ->info('Autodiscover action classes stored in the configured directory of bundles and register them as service.')
                     ->canBeDisabled()
+                    ->fixXmlConfig('directory', 'directories')
                     ->children()
                         ->arrayNode('directories')
                             ->info('The directory name to autodiscover in bundles.')
