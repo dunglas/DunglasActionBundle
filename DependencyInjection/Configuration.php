@@ -51,6 +51,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('directories')
                     ->info('List of directories relative to the kernel root directory containing classes.')
+                    ->useAttributeAsKey('prefix')
                     ->prototype('array')
                         ->prototype('scalar')->end()
                     ->end()
