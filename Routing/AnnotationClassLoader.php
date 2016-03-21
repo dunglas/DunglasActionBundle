@@ -24,7 +24,7 @@ class AnnotationClassLoader extends BaseAnnotationClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
-        $route->setDefault('_controller', 'action.'.$class->name.':'.$method->name);
+        $route->setDefault('_controller', 'controller.'.$class->name.':'.$method->name);
     }
 
     /**
@@ -32,6 +32,6 @@ class AnnotationClassLoader extends BaseAnnotationClassLoader
      */
     public function supports($resource, $type = null)
     {
-        return 'action-annotation' === $type && parent::supports($resource) && false !== strpos($resource, '\Action');
+        return 'action-annotation' === $type && parent::supports($resource);
     }
 }

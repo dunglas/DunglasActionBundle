@@ -43,14 +43,14 @@ final class TestKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
-        $routes->add('/isolated', 'action.Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
+        $routes->add('/', 'controller.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
+        $routes->add('/isolated', 'controller.Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
 
         // Use the @Route annotation
         $routes->import('@TestBundle/Action/', '/', 'action-annotation');
 
         // Cohabitation between old school controllers and actions
-        $routes->import('@TestBundle/Controller/', '/', 'annotation');
+        $routes->import('@TestBundle/Controller/', '/', 'action-annotation');
     }
 
     /**
@@ -64,9 +64,12 @@ final class TestKernel extends Kernel
         ]);
 
         $c->loadFromExtension('dunglas_action', [
-            'directories' => ['action' => ['IsolatedAction']],
+            'directories' => [
+                'controller' => ['*Bundle/Controller', 'IsolatedAction'],
+                'command' => ['*Bundle/Command'],
+            ],
         ]);
 
-        $c->register('action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
+        $c->register('controller.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
     }
 }

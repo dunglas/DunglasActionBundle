@@ -19,12 +19,13 @@ class CommandRegistrationTest extends KernelTestCase
     public function testCommandRegistrationAction()
     {
         static::bootKernel();
+        $container = static::$kernel->getContainer();
 
-        $commandId = 'console.dunglas\actionbundle\tests\fixtures\testbundle\console\foocommand';
-        $this->assertTrue(static::$kernel->getContainer()->has($commandId));
+        $commandId = 'command.dunglas\actionbundle\tests\fixtures\testbundle\command\foocommand';
+        $this->assertTrue($container->has($commandId));
 
-        $this->assertContains($commandId, static::$kernel->getContainer()->getParameter('console.command.ids'));
+        $this->assertContains($commandId, $container->getParameter('console.command.ids'));
 
-        $this->assertFalse(static::$kernel->getContainer()->has('console.dunglas\actionbundle\tests\fixtures\testbundle\console\bar'));
+        $this->assertFalse($container->has('command.dunglas\actionbundle\tests\fixtures\testbundle\command\bar'));
     }
 }

@@ -12,6 +12,7 @@ namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Automatically registers classes in the Action/ directory of bundles as a service.
@@ -96,17 +97,15 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $classes = [];
         $includedFiles = [];
 
-        $iterator = new \RegexIterator(
-            new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($actionDirectory, \FilesystemIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::LEAVES_ONLY
-            ),
-            '/^.+\.php$/i',
-            \RecursiveRegexIterator::GET_MATCH
-        );
+        $finder = new Finder();
+        try {
+            $finder->in($actionDirectory)->files()->name('*.php');
+        } catch (\InvalidArgumentException $e) {
+            return [];
+        }
 
-        foreach ($iterator as $file) {
-            $sourceFile = $file[0];
+        foreach ($finder as $file) {
+            $sourceFile = $file->getRealpath();
             if (!preg_match('(^phar:)i', $sourceFile)) {
                 $sourceFile = realpath($sourceFile);
             }
@@ -140,7 +139,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
-        if ('console' === $prefix && !is_subclass_of($className, Command::class)) {
+        if ('command' === $prefix && !is_subclass_of($className, Command::class)) {
             return;
         }
 
@@ -153,7 +152,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $definition = $container->register($id, $className);
         $definition->setAutowired(true);
 
-        if ('console' === $prefix) {
+        if ('command' === $prefix) {
             $definition->addTag('console.command');
         }
     }

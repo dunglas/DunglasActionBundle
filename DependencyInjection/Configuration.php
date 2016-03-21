@@ -40,14 +40,7 @@ class Configuration implements ConfigurationInterface
                             ->prototype('array')
                                 ->prototype('scalar')->end()
                             ->end()
-                            ->defaultValue(call_user_func(function () {
-                                $defaultValue = ['action' => ['Action']];
-                                if (class_exists(Command::class)) {
-                                    $defaultValue['console'] = ['Console'];
-                                }
-
-                                return $defaultValue;
-                            }))
+                            ->defaultValue(['controller' => ['Action']])
                         ->end()
                     ->end()
                 ->end()
@@ -57,6 +50,14 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->prototype('scalar')->end()
                     ->end()
+                    ->defaultValue(call_user_func(function () {
+                        $defaultValue = ['controller' => ['../src/*Bundle/Controller']];
+                        if (class_exists(Command::class)) {
+                            $defaultValue['command'] = ['../src/*Bundle/Command'];
+                        }
+
+                        return $defaultValue;
+                    }))
                 ->end()
             ->end()
         ->end();
