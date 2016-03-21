@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->arrayNode('directories')
                             ->info('The directory name to autodiscover in bundles.')
+                            ->useAttributeAsKey('prefix')
                             ->prototype('array')
                                 ->prototype('scalar')->end()
                             ->end()
