@@ -104,11 +104,11 @@ class MyAction
 **There is no step 2! You're already done.**
 
 All classes inside of the `Action/` directory of your project bundles are automatically registered as services.
-By convention, those services follow this pattern: `action.The\Fully\Qualified\Class\Name`.
+By convention, those services follow this pattern: `controller.The\Fully\Qualified\Class\Name`.
 
-For instance, the class in the example is automatically registered with the name `action.AppBundle\Action\MyAction`.
+For instance, the class in the example is automatically registered with the name `controller.AppBundle\Action\MyAction`.
 
-The ``Command``s located in the `Console` directory of your bundles are registered as services as `console.The\Fully\Qualified\Class\Name`.
+The ``Command``s located in the `Command` directory of your bundles are registered as services as `command.The\Fully\Qualified\Class\Name`.
 
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
 Component, you can just typehint dependencies you need in the constructor, they will be automatically injected.
@@ -120,12 +120,12 @@ Service definition can easily be customized by explicitly defining a service nam
 
 services:
     # This is a custom service definition
-    'action.AppBundle\Action\MyAction':
+    'controller.AppBundle\Action\MyAction':
         class: 'AppBundle\Action\MyAction'
         arguments: [ '@router', '@twig' ]
 
-    'console.AppBundle\Console\MyCommand':
-        class: 'AppBundle\Console\MyCommand'
+    'command.AppBundle\Command\MyCommand':
+        class: 'AppBundle\Command\MyCommand'
         arguments: [ '@router', '@twig' ]
         tags:
             - { name: console.command }
@@ -168,7 +168,7 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'action.AppBundle\Action\MyAction', 'my_route');
+        $routes->add('/', 'controller.AppBundle\Action\MyAction', 'my_route');
         // Alternatively, use @Route annotations
         // $routes->import('@AppBundle/Action/', '/', 'action-annotation');
     }
@@ -193,11 +193,12 @@ dunglas_action:
     autodiscover:         # Autodiscover action classes stored in the configured directory of bundles and register them as service.
         enabled:   true
         directories: # The directories name to autodiscover in bundles.
-            action: [ Action ]   # Automatically adapted in the routing
-            console: [ Console ] # Automatically tagged
-            foo: [ Foo ]         # Only registered
-    directories:         # List of directories relative to the kernel root directory containing classes to auto-register.
-        console: [ '../src/MyBundle/My/Uncommon/Directory' ]
+            controller: [ Action ] # Automatically adapted in the routing
+            command: [ Console ] # Automatically tagged
+            foo: [ Foo ] # All class in this directory will be registered as services
+    directories: # List of directories relative to the kernel root directory containing classes to auto-register.
+        controller: [ '../src/*Bundle/My/Uncommon/Directory' ]
+        command: [ '../src/*Bundle/My/Other/Uncommon/Directory' ]
 ```
 
 ## Credits
