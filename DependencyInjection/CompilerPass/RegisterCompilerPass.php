@@ -12,6 +12,7 @@ namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Automatically registers classes in the Action/ directory of bundles as a service.
@@ -38,16 +39,6 @@ final class RegisterCompilerPass implements CompilerPassInterface
             }
         }
 
-        if ($container->getParameter('dunglas_action.autodiscover.enabled')) {
-            foreach ($container->getParameter('dunglas_action.autodiscover.directories') as $prefix => $dirs) {
-                if (!isset($directories[$prefix])) {
-                    $directories[$prefix] = [];
-                }
-
-                $directories[$prefix] = array_merge($directories[$prefix], $this->getAutodiscoveredDirectories($container, $dirs));
-            }
-        }
-
         foreach ($directories as $prefix => $dirs) {
             foreach ($dirs as $directory) {
                 foreach ($this->getClasses($directory) as $class) {
@@ -55,33 +46,6 @@ final class RegisterCompilerPass implements CompilerPassInterface
                 }
             }
         }
-    }
-
-    /**
-     * Gets the list of directories to autodiscover.
-     *
-     * @param ContainerBuilder $container
-     * @param string[]         $dirs
-     *
-     * @return array
-     */
-    private function getAutodiscoveredDirectories(ContainerBuilder $container, $dirs)
-    {
-        $directories = [];
-
-        foreach ($container->getParameter('kernel.bundles') as $bundle) {
-            $reflectionClass = new \ReflectionClass($bundle);
-            $bundleDirectory = dirname($reflectionClass->getFileName());
-            foreach ($dirs as $directory) {
-                $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.$directory;
-
-                if (file_exists($actionDirectory)) {
-                    $directories[] = $actionDirectory;
-                }
-            }
-        }
-
-        return $directories;
     }
 
     /**
@@ -96,17 +60,15 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $classes = [];
         $includedFiles = [];
 
-        $iterator = new \RegexIterator(
-            new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($actionDirectory, \FilesystemIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::LEAVES_ONLY
-            ),
-            '/^.+\.php$/i',
-            \RecursiveRegexIterator::GET_MATCH
-        );
+        $finder = new Finder();
+        try {
+            $finder->in($actionDirectory)->files()->name('*.php');
+        } catch (\InvalidArgumentException $e) {
+            return [];
+        }
 
-        foreach ($iterator as $file) {
-            $sourceFile = $file[0];
+        foreach ($finder as $file) {
+            $sourceFile = $file->getRealpath();
             if (!preg_match('(^phar:)i', $sourceFile)) {
                 $sourceFile = realpath($sourceFile);
             }
@@ -140,7 +102,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
-        if ('console' === $prefix && !is_subclass_of($className, Command::class)) {
+        if ('command' === $prefix && !is_subclass_of($className, Command::class)) {
             return;
         }
 
@@ -153,7 +115,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $definition = $container->register($id, $className);
         $definition->setAutowired(true);
 
-        if ('console' === $prefix) {
+        if ('command' === $prefix) {
             $definition->addTag('console.command');
         }
     }

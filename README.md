@@ -47,7 +47,7 @@ Optional: to use the `@Route` annotation add the following lines in `app/config/
 
 ```yaml
 app_action:
-    resource: '@AppBundle/Action/'
+    resource: '@AppBundle/Action/' # Use @AppBundle/Controller/ if you prefer
     type:     'action-annotation'
 ```
 
@@ -101,17 +101,21 @@ class MyAction
 }
 ```
 
+Alternatively, you can create typical controller class with several `*Action` methods in the `Controller` directory of your
+bundle, it will be autowired the same way.
+
 **There is no step 2! You're already done.**
 
-All classes inside of the `Action/` directory of your project bundles are automatically registered as services.
-By convention, those services follow this pattern: `action.The\Fully\Qualified\Class\Name`.
+All classes inside `Action/` and `Controller/` directories of your project bundles are automatically registered as services.
+By convention, those services follow this pattern: `controller.The\Fully\Qualified\Class\Name`.
 
-For instance, the class in the example is automatically registered with the name `action.AppBundle\Action\MyAction`.
+For instance, the class in the example is automatically registered with the name `controller.AppBundle\Action\MyAction`.
 
-The ``Command``s located in the `Console` directory of your bundles are registered as services as `console.The\Fully\Qualified\Class\Name`.
+`Command`'s located in the `Command` directory of your bundles are also registered as services. Services name looks like
+`command.The\Fully\Qualified\Class\Name`.
 
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
-Component, you can just typehint dependencies you need in the constructor, they will be automatically injected.
+Component, you can just typehint dependencies you need in the constructor, they will be automatically initialized and injected.
 
 Service definition can easily be customized by explicitly defining a service named according to the same convention:
 
@@ -120,12 +124,12 @@ Service definition can easily be customized by explicitly defining a service nam
 
 services:
     # This is a custom service definition
-    'action.AppBundle\Action\MyAction':
+    'controller.AppBundle\Action\MyAction':
         class: 'AppBundle\Action\MyAction'
         arguments: [ '@router', '@twig' ]
 
-    'console.AppBundle\Console\MyCommand':
-        class: 'AppBundle\Console\MyCommand'
+    'command.AppBundle\Command\MyCommand':
+        class: 'AppBundle\Command\MyCommand'
         arguments: [ '@router', '@twig' ]
         tags:
             - { name: console.command }
@@ -168,7 +172,7 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'action.AppBundle\Action\MyAction', 'my_route');
+        $routes->add('/', 'controller.AppBundle\Action\MyAction', 'my_route');
         // Alternatively, use @Route annotations
         // $routes->import('@AppBundle/Action/', '/', 'action-annotation');
     }
@@ -190,14 +194,9 @@ Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixt
 # app/config/config.yml
 
 dunglas_action:
-    autodiscover:         # Autodiscover action classes stored in the configured directory of bundles and register them as service.
-        enabled:   true
-        directories: # The directories name to autodiscover in bundles.
-            action: [ Action ]   # Automatically adapted in the routing
-            console: [ Console ] # Automatically tagged
-            foo: [ Foo ]         # Only registered
-    directories:         # List of directories relative to the kernel root directory containing classes to auto-register.
-        console: [ '../src/MyBundle/My/Uncommon/Directory' ]
+    directories: # List of directories relative to the kernel root directory containing classes to auto-register.
+        controller: [ '../src/*Bundle/Controller', '../src/*Bundle/Action', '../src/*Bundle/My/Uncommon/Directory' ]
+        command: [ '../src/*Bundle/Command', '../src/*Bundle/My/Other/Uncommon/Directory' ]
 ```
 
 ## Credits

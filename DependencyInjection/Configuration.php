@@ -29,34 +29,16 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->root('dunglas_action')
             ->fixXmlConfig('directory', 'directories')
             ->children()
-                ->arrayNode('autodiscover')
-                    ->info('Autodiscover action classes stored in the configured directory of bundles and register them as service.')
-                    ->canBeDisabled()
-                    ->fixXmlConfig('directory', 'directories')
-                    ->children()
-                        ->arrayNode('directories')
-                            ->info('The directory name to autodiscover in bundles.')
-                            ->useAttributeAsKey('prefix')
-                            ->prototype('array')
-                                ->prototype('scalar')->end()
-                            ->end()
-                            ->defaultValue(call_user_func(function () {
-                                $defaultValue = ['action' => ['Action']];
-                                if (class_exists(Command::class)) {
-                                    $defaultValue['console'] = ['Console'];
-                                }
-
-                                return $defaultValue;
-                            }))
-                        ->end()
-                    ->end()
-                ->end()
                 ->arrayNode('directories')
                     ->info('List of directories relative to the kernel root directory containing classes.')
                     ->useAttributeAsKey('prefix')
                     ->prototype('array')
                         ->prototype('scalar')->end()
                     ->end()
+                    ->defaultValue([
+                        'controller' => ['../src/*Bundle/Controller', '../src/*Bundle/Action'],
+                        'command' => ['../src/*Bundle/Command'],
+                    ])
                 ->end()
             ->end()
         ->end();
