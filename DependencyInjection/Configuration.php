@@ -12,6 +12,7 @@ namespace Dunglas\ActionBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * {@inheritdoc}
@@ -39,6 +40,29 @@ class Configuration implements ConfigurationInterface
                         'controller' => ['../src/*Bundle/Controller', '../src/*Bundle/Action'],
                         'command' => ['../src/*Bundle/Command'],
                         'event_subscriber' => ['../src/*Bundle/EventSubscriber'],
+                    ])
+                ->end()
+                ->arrayNode('tags')
+                    ->info('List of tags to add when implementing the corresponding class.')
+                    ->useAttributeAsKey('class')
+                    ->prototype('array')
+                        // Converts 'console.command' to ['console.command']
+                        ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
+                        ->prototype('array')
+                            // Converts 'console.command' to ['console.command', []]
+                            ->beforeNormalization()->ifString()->then(function ($v) { return [$v, []]; })->end()
+                            ->validate()
+                                ->ifTrue(function ($v) {
+                                    return count($v) !== 2 || !is_string($v[0]) || !is_array($v[1]);
+                                })
+                                ->thenInvalid('Invalid tag format. They must be as following: [\'my_tag.name\', [\'attribute\' => \'value\']]')
+                            ->end()
+                            ->prototype('variable')->end()
+                        ->end()
+                    ->end()
+                    ->defaultValue([
+                        Command::class => [['console.command', []]],
+                        EventSubscriberInterface::class => [['kernel.event_subscriber', []]],
                     ])
                 ->end()
             ->end()

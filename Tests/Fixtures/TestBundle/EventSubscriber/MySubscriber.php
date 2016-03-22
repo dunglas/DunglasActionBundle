@@ -12,7 +12,7 @@ namespace Dunglas\ActionBundle\Tests\Fixtures\TestBundle\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @author Ener-Getick <egetick@gmail.com>
+ * @author Guilhem N <egetick@gmail.com>
  */
 class MySubscriber implements EventSubscriberInterface
 {

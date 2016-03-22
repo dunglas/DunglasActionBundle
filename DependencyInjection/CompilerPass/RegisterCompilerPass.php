@@ -9,11 +9,9 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -113,21 +111,20 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $definition = $container->register($id, $className);
         $definition->setAutowired(true);
 
-        $this->customizeServiceDefinition($definition);
+        $this->customizeServiceDefinition($container, $definition);
     }
 
-    private function customizeServiceDefinition(Definition $definition)
+    private function customizeServiceDefinition(ContainerBuilder $container, Definition $definition)
     {
-        $class = $definition->getClass();
+        $definitionClass = $definition->getClass();
 
-        // Commands
-        if (is_subclass_of($class, Command::class)) {
-            $definition->addTag('console.command');
-        }
-
-        // Event subscribers
-        if (is_subclass_of($class, EventSubscriberInterface::class)) {
-            $definition->addTag('kernel.event_subscriber');
+        foreach ($container->getParameter('dunglas_action.tags') as $class => $tags) {
+            if ($definitionClass === $class || is_subclass_of($definitionClass, $class)) {
+                foreach ($tags as $tag) {
+                    list($name, $attributes) = $tag;
+                    $definition->addTag($name, $attributes);
+                }
+            }
         }
     }
 }

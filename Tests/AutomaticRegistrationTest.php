@@ -12,7 +12,7 @@ namespace Dunglas\ActionBundle\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * @author Ener-Getick <egetick@gmail.com>
+ * @author Guilhem N <egetick@gmail.com>
  */
 class AutomaticRegistrationTest extends KernelTestCase
 {

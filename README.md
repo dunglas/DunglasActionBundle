@@ -111,8 +111,11 @@ By convention, those services follow this pattern: `controller.The\Fully\Qualifi
 
 For instance, the class in the example is automatically registered with the name `controller.AppBundle\Action\MyAction`.
 
-`Command`'s located in the `Command` directory  and `EventSubscriberInterface` located in the `EventSubscriber` directory of your bundles are also registered as services. Services name looks like
-`command.The\Fully\Qualified\Class\Name` and `event_subcriber.The\Fully\Qualified\Class\Name`.
+There are other classes/tags supported:
+| Class Name               | Tag                     | Directory
+| ------------------------ | ----------------------- | ---------
+| Command                  | console.command         | Command
+| EventSubscriberInterface | kernel.event_subscriber | EventSubscriber
 
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
 Component, you can just typehint dependencies you need in the constructor, they will be automatically initialized and injected.
@@ -136,7 +139,6 @@ services:
 
     'event_subscriber.AppBundle\EventSubscriber\MySubscriber':
         class: 'AppBundle\EventSubscriber\MySubscriber'
-        arguments: [ '@router', '@twig' ]
         tags:
             - { name: kernel.event_subscriber }
 ```
@@ -204,6 +206,12 @@ dunglas_action:
         controller: [ '../src/*Bundle/Controller', '../src/*Bundle/Action', '../src/*Bundle/My/Uncommon/Directory' ]
         command: [ '../src/*Bundle/Command', '../src/*Bundle/My/Other/Uncommon/Directory' ]
         event_subscriber: [ '../src/*Bundle/EventSubscriber', '...' ]
+    tags:
+        'Symfony\Component\Console\Command\Command': console.command
+        'Symfony\Component\EventDispatcher\EventSubscriberInterface': kernel.event_subscriber
+        'My\Custom\Interface\To\Auto\Tag':
+            - my_custom.tag
+            - [ my_custom.tag_with_attributes, [ attribute: value ] ]
 ```
 
 ## Credits
