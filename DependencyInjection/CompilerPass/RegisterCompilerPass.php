@@ -39,16 +39,6 @@ final class RegisterCompilerPass implements CompilerPassInterface
             }
         }
 
-        if ($container->getParameter('dunglas_action.autodiscover.enabled')) {
-            foreach ($container->getParameter('dunglas_action.autodiscover.directories') as $prefix => $dirs) {
-                if (!isset($directories[$prefix])) {
-                    $directories[$prefix] = [];
-                }
-
-                $directories[$prefix] = array_merge($directories[$prefix], $this->getAutodiscoveredDirectories($container, $dirs));
-            }
-        }
-
         foreach ($directories as $prefix => $dirs) {
             foreach ($dirs as $directory) {
                 foreach ($this->getClasses($directory) as $class) {
@@ -56,33 +46,6 @@ final class RegisterCompilerPass implements CompilerPassInterface
                 }
             }
         }
-    }
-
-    /**
-     * Gets the list of directories to autodiscover.
-     *
-     * @param ContainerBuilder $container
-     * @param string[]         $dirs
-     *
-     * @return array
-     */
-    private function getAutodiscoveredDirectories(ContainerBuilder $container, $dirs)
-    {
-        $directories = [];
-
-        foreach ($container->getParameter('kernel.bundles') as $bundle) {
-            $reflectionClass = new \ReflectionClass($bundle);
-            $bundleDirectory = dirname($reflectionClass->getFileName());
-            foreach ($dirs as $directory) {
-                $actionDirectory = $bundleDirectory.DIRECTORY_SEPARATOR.$directory;
-
-                if (file_exists($actionDirectory)) {
-                    $directories[] = $actionDirectory;
-                }
-            }
-        }
-
-        return $directories;
     }
 
     /**

@@ -65,7 +65,7 @@ final class TestKernel extends Kernel
 
         $c->loadFromExtension('dunglas_action', [
             'directories' => [
-                'controller' => ['*Bundle/Controller', 'IsolatedAction'],
+                'controller' => ['*Bundle/Controller', '*Bundle/Action', 'IsolatedAction'],
                 'command' => ['*Bundle/Command'],
             ],
         ]);
