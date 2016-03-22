@@ -23,9 +23,8 @@ class CommandRegistrationTest extends KernelTestCase
 
         $commandId = 'command.dunglas\actionbundle\tests\fixtures\testbundle\command\foocommand';
         $this->assertTrue($container->has($commandId));
-
         $this->assertContains($commandId, $container->getParameter('console.command.ids'));
 
-        $this->assertFalse($container->has('command.dunglas\actionbundle\tests\fixtures\testbundle\command\bar'));
+        $this->assertTrue($container->has('command.dunglas\actionbundle\tests\fixtures\testbundle\command\bar'));
     }
 }
