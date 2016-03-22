@@ -80,4 +80,12 @@ class FunctionalTest extends WebTestCase
         static::bootKernel();
         $this->assertFalse(static::$kernel->getContainer()->has('action.dunglas\actionBundle\tests\fixtures\testbundle\action\abstractaction'));
     }
+
+    public function testCanAccessTraditionalController()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/traditional');
+        $this->assertSame('traditional', $crawler->text());
+    }
 }

@@ -24,14 +24,6 @@ class AnnotationClassLoader extends BaseAnnotationClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
-        $route->setDefault('_controller', 'controller.'.$class->name.':'.$method->name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($resource, $type = null)
-    {
-        return 'action-annotation' === $type && parent::supports($resource);
+        $route->setDefault('_controller', sprintf('controller.%s:%s', $class->name, $method->name));
     }
 }
