@@ -11,10 +11,10 @@ namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Automatically registers classes in the Action/ directory of bundles as a service.
@@ -123,6 +123,11 @@ final class RegisterCompilerPass implements CompilerPassInterface
         // Commands
         if (is_subclass_of($class, Command::class)) {
             $definition->addTag('console.command');
+        }
+
+        // Event subscribers
+        if (is_subclass_of($class, EventSubscriberInterface::class)) {
+            $definition->addTag('kernel.event_subscriber');
         }
     }
 }

@@ -111,8 +111,8 @@ By convention, those services follow this pattern: `controller.The\Fully\Qualifi
 
 For instance, the class in the example is automatically registered with the name `controller.AppBundle\Action\MyAction`.
 
-`Command`'s located in the `Command` directory of your bundles are also registered as services. Services name looks like
-`command.The\Fully\Qualified\Class\Name`.
+`Command`'s located in the `Command` directory  and `EventSubscriberInterface` located in the `EventSubscriber` directory of your bundles are also registered as services. Services name looks like
+`command.The\Fully\Qualified\Class\Name` and `event_subcriber.The\Fully\Qualified\Class\Name`.
 
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
 Component, you can just typehint dependencies you need in the constructor, they will be automatically initialized and injected.
@@ -133,6 +133,12 @@ services:
         arguments: [ '@router', '@twig' ]
         tags:
             - { name: console.command }
+
+    'event_subscriber.AppBundle\EventSubscriber\MySubscriber':
+        class: 'AppBundle\EventSubscriber\MySubscriber'
+        arguments: [ '@router', '@twig' ]
+        tags:
+            - { name: kernel.event_subscriber }
 ```
 
 This bundle also hooks into the Routing Component (if it is available): when the `@Route` annotation is used as in the example,
@@ -197,6 +203,7 @@ dunglas_action:
     directories: # List of directories relative to the kernel root directory containing classes to auto-register.
         controller: [ '../src/*Bundle/Controller', '../src/*Bundle/Action', '../src/*Bundle/My/Uncommon/Directory' ]
         command: [ '../src/*Bundle/Command', '../src/*Bundle/My/Other/Uncommon/Directory' ]
+        event_subscriber: [ '../src/*Bundle/EventSubscriber', '...' ]
 ```
 
 ## Credits

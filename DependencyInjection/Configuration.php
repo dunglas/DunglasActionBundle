@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([
                         'controller' => ['../src/*Bundle/Controller', '../src/*Bundle/Action'],
                         'command' => ['../src/*Bundle/Command'],
+                        'event_subscriber' => ['../src/*Bundle/EventSubscriber'],
                     ])
                 ->end()
             ->end()
