@@ -9,9 +9,9 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -110,10 +110,6 @@ final class RegisterCompilerPass implements CompilerPassInterface
      */
     private function registerClass(ContainerBuilder $container, $prefix, $className)
     {
-        if ('command' === $prefix && !is_subclass_of($className, Command::class)) {
-            return;
-        }
-
         $id = sprintf('%s.%s', $prefix, $className);
 
         if ($container->has($id)) {
@@ -123,8 +119,20 @@ final class RegisterCompilerPass implements CompilerPassInterface
         $definition = $container->register($id, $className);
         $definition->setAutowired(true);
 
-        if ('command' === $prefix) {
-            $definition->addTag('console.command');
+        $this->customizeServiceDefinition($container, $definition);
+    }
+
+    private function customizeServiceDefinition(ContainerBuilder $container, Definition $definition)
+    {
+        $definitionClass = $definition->getClass();
+
+        foreach ($container->getParameter('dunglas_action.tags') as $class => $tags) {
+            if ($definitionClass === $class || is_subclass_of($definitionClass, $class)) {
+                foreach ($tags as $tag) {
+                    list($name, $attributes) = $tag;
+                    $definition->addTag($name, $attributes);
+                }
+            }
         }
     }
 }

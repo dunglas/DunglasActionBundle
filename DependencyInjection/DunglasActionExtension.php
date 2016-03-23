@@ -30,6 +30,7 @@ class DunglasActionExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('dunglas_action.directories', $config['directories']);
+        $container->setParameter('dunglas_action.tags', $config['tags']);
 
         if (class_exists('Symfony\Component\Routing\Loader\AnnotationDirectoryLoader')) {
             $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

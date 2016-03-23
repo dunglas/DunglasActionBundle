@@ -70,6 +70,7 @@ final class TestKernel extends Kernel
             'directories' => [
                 'controller' => ['TestBundle/Controller', '*Bundle/Action', 'IsolatedAction'],
                 'command' => ['*Bundle/Command'],
+                'event_subscriber' => ['*Bundle/EventSubscriber'],
             ],
         ]);
 
