@@ -8,6 +8,7 @@
  */
 
 use Dunglas\ActionBundle\DunglasActionBundle;
+use Dunglas\ActionBundle\Tests\Fixtures\NotScannedBundle\NotScannedBundle;
 use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\TestBundle;
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -34,6 +35,7 @@ final class TestKernel extends Kernel
             new DunglasActionBundle(),
             new SensioFrameworkExtraBundle(),
             new TestBundle(),
+            new NotScannedBundle(),
         ];
     }
 
@@ -47,10 +49,11 @@ final class TestKernel extends Kernel
         $routes->add('/isolated', 'controller.Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
 
         // Use the @Route annotation
-        $routes->import('@TestBundle/Action/', '/', 'action-annotation');
+        $routes->import('@TestBundle/Action/', '/', 'annotation');
 
         // Cohabitation between old school controllers and actions
-        $routes->import('@TestBundle/Controller/', '/', 'action-annotation');
+        $routes->import('@TestBundle/Controller/', '/', 'annotation');
+        $routes->import('@NotScannedBundle/Controller/', '/', 'annotation');
     }
 
     /**
@@ -65,7 +68,7 @@ final class TestKernel extends Kernel
 
         $c->loadFromExtension('dunglas_action', [
             'directories' => [
-                'controller' => ['*Bundle/Controller', '*Bundle/Action', 'IsolatedAction'],
+                'controller' => ['TestBundle/Controller', '*Bundle/Action', 'IsolatedAction'],
                 'command' => ['*Bundle/Command'],
             ],
         ]);

@@ -39,35 +39,43 @@ final class RegisterCompilerPass implements CompilerPassInterface
             }
         }
 
+        $scannedDirectories = [];
         foreach ($directories as $prefix => $dirs) {
             foreach ($dirs as $directory) {
-                foreach ($this->getClasses($directory) as $class) {
+                list($classes, $dirs) = $this->getClasses($directory);
+                $scannedDirectories = array_merge($scannedDirectories, $dirs);
+
+                foreach ($classes as $class) {
                     $this->registerClass($container, $prefix, $class);
                 }
             }
         }
+
+        $container->setParameter('dunglas_action.scanned_directories', $scannedDirectories);
     }
 
     /**
      * Gets the list of class names in the given directory.
      *
-     * @param string $actionDirectory
+     * @param string $directory
      *
-     * @return string[]
+     * @return array
      */
-    private function getClasses($actionDirectory)
+    private function getClasses($directory)
     {
         $classes = [];
+        $scannedDirectories = [];
         $includedFiles = [];
 
         $finder = new Finder();
         try {
-            $finder->in($actionDirectory)->files()->name('*.php');
+            $finder->in($directory)->files()->name('*.php');
         } catch (\InvalidArgumentException $e) {
             return [];
         }
 
         foreach ($finder as $file) {
+            $scannedDirectories[$file->getPath()] = true;
             $sourceFile = $file->getRealpath();
             if (!preg_match('(^phar:)i', $sourceFile)) {
                 $sourceFile = realpath($sourceFile);
@@ -91,7 +99,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
             }
         }
 
-        return array_keys($classes);
+        return [array_keys($classes), $scannedDirectories];
     }
 
     /**

@@ -46,9 +46,17 @@ public function registerBundles()
 Optional: to use the `@Route` annotation add the following lines in `app/config/routing.yml`:
 
 ```yaml
-app_action:
+app:
     resource: '@AppBundle/Action/' # Use @AppBundle/Controller/ if you prefer
-    type:     'action-annotation'
+    type:     'annotation'
+```
+
+If you don't want to use annotations but prefer raw YAML, use the following syntax:
+
+```yaml
+foo:
+    path:      /foo/{bar}
+    defaults:  { _controller: 'controller.Path\To\Your\Action' } # this is the name of the autoregistered service corresponding to this controller
 ```
 
 ## Usage
