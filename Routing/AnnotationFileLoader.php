@@ -10,7 +10,7 @@
 namespace Dunglas\ActionBundle\Routing;
 
 use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Routing\Loader\AnnotationClassLoader;
+use Symfony\Component\Routing\Loader\AnnotationClassLoader as BaseAnnotationClassLoader;
 use Symfony\Component\Routing\Loader\AnnotationFileLoader as BaseAnnotationFileLoader;
 
 /**
@@ -22,7 +22,7 @@ class AnnotationFileLoader extends BaseAnnotationFileLoader
 {
     private $scannedDirectories;
 
-    public function __construct(FileLocatorInterface $locator, AnnotationClassLoader $loader, array $scannedDirectories)
+    public function __construct(FileLocatorInterface $locator, BaseAnnotationClassLoader $loader, array $scannedDirectories)
     {
         parent::__construct($locator, $loader);
 
