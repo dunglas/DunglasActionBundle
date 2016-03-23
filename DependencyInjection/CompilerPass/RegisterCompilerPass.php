@@ -9,6 +9,7 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection\CompilerPass;
 
+use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -49,6 +50,10 @@ final class RegisterCompilerPass implements CompilerPassInterface
                     $this->registerClass($container, $prefix, $class);
                 }
             }
+        }
+
+        foreach ($scannedDirectories as $directory => $v) {
+            $container->addResource(new DirectoryResource($directory));
         }
 
         $container->setParameter('dunglas_action.scanned_directories', $scannedDirectories);
