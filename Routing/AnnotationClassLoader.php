@@ -24,6 +24,6 @@ class AnnotationClassLoader extends BaseAnnotationClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
-        $route->setDefault('_controller', sprintf('controller.%s:%s', $class->name, $method->name));
+        $route->setDefault('_controller', sprintf('%s:%s', $class->name, $method->name));
     }
 }

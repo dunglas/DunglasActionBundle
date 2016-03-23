@@ -32,14 +32,12 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('directories')
                     ->info('List of directories relative to the kernel root directory containing classes.')
-                    ->useAttributeAsKey('prefix')
-                    ->prototype('array')
-                        ->prototype('scalar')->end()
-                    ->end()
+                    ->prototype('scalar')->end()
                     ->defaultValue([
-                        'controller' => ['../src/*Bundle/Controller', '../src/*Bundle/Action'],
-                        'command' => ['../src/*Bundle/Command'],
-                        'event_subscriber' => ['../src/*Bundle/EventSubscriber'],
+                        '../src/*Bundle/Controller',
+                        '../src/*Bundle/Action',
+                        '../src/*Bundle/Command',
+                        '../src/*Bundle/EventSubscriber',
                     ])
                 ->end()
                 ->arrayNode('tags')

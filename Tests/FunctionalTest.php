@@ -20,6 +20,8 @@ class FunctionalTest extends WebTestCase
     {
         $client = static::createClient();
 
+        static::$kernel->getContainer()->has('Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction');
+
         $crawler = $client->request('GET', '/');
         $this->assertSame('Here we are!', $crawler->text());
     }
@@ -78,7 +80,7 @@ class FunctionalTest extends WebTestCase
     public function testAbstractClassNotRegistered()
     {
         static::bootKernel();
-        $this->assertFalse(static::$kernel->getContainer()->has('action.dunglas\actionBundle\tests\fixtures\testbundle\action\abstractaction'));
+        $this->assertFalse(static::$kernel->getContainer()->has('dunglas\actionBundle\tests\fixtures\testbundle\action\abstractaction'));
     }
 
     public function testCanAccessTraditionalController()

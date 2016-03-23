@@ -56,7 +56,7 @@ If you don't want to use annotations but prefer raw YAML, use the following synt
 ```yaml
 foo:
     path:      /foo/{bar}
-    defaults:  { _controller: 'controller.Path\To\Your\Action' } # this is the name of the autoregistered service corresponding to this controller
+    defaults:  { _controller: 'Path\To\Your\Action:__invoke' } # this is the name of the autoregistered service corresponding to this controller
 ```
 
 ## Usage
@@ -115,11 +115,12 @@ bundle, it will be autowired the same way.
 **There is no step 2! You're already done.**
 
 All classes inside `Action/` and `Controller/` directories of your project bundles are automatically registered as services.
-By convention, those services follow this pattern: `controller.The\Fully\Qualified\Class\Name`.
+By convention, the service name is the Fully Qualified Name of the class.
 
-For instance, the class in the example is automatically registered with the name `controller.AppBundle\Action\MyAction`.
+For instance, the class in the example is automatically registered with the name `AppBundle\Action\MyAction`.
 
 There are other classes/tags supported:
+
 | Class Name               | Tag                     | Directory
 | ------------------------ | ----------------------- | ---------
 | Command                  | console.command         | Command
@@ -135,17 +136,17 @@ Service definition can easily be customized by explicitly defining a service nam
 
 services:
     # This is a custom service definition
-    'controller.AppBundle\Action\MyAction':
+    'AppBundle\Action\MyAction':
         class: 'AppBundle\Action\MyAction'
         arguments: [ '@router', '@twig' ]
 
-    'command.AppBundle\Command\MyCommand':
+    'AppBundle\Command\MyCommand':
         class: 'AppBundle\Command\MyCommand'
         arguments: [ '@router', '@twig' ]
         tags:
             - { name: console.command }
 
-    'event_subscriber.AppBundle\EventSubscriber\MySubscriber':
+    'AppBundle\EventSubscriber\MySubscriber':
         class: 'AppBundle\EventSubscriber\MySubscriber'
         tags:
             - { name: kernel.event_subscriber }
@@ -188,9 +189,9 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'controller.AppBundle\Action\MyAction', 'my_route');
+        $routes->add('/', 'AppBundle\Action\MyAction:__invoke', 'my_route');
         // Alternatively, use @Route annotations
-        // $routes->import('@AppBundle/Action/', '/', 'action-annotation');
+        // $routes->import('@AppBundle/Action/', '/', 'annotation');
     }
 
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
@@ -211,17 +212,21 @@ Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixt
 
 dunglas_action:
     directories: # List of directories relative to the kernel root directory containing classes to auto-register.
-        controller: [ '../src/*Bundle/Controller', '../src/*Bundle/Action', '../src/*Bundle/My/Uncommon/Directory' ]
-        command: [ '../src/*Bundle/Command', '../src/*Bundle/My/Other/Uncommon/Directory' ]
-        event_subscriber: [ '../src/*Bundle/EventSubscriber', '...' ]
+        - '../src/*Bundle/Controller'
+        - '../src/*Bundle/Action'
+        - '../src/*Bundle/Command'
+        - '../src/*Bundle/EventSubscriber'
+        # This one is not registered by default
+        - '../src/*Bundle/My/Uncommon/Directory'
     tags:
         'Symfony\Component\Console\Command\Command': console.command
         'Symfony\Component\EventDispatcher\EventSubscriberInterface': kernel.event_subscriber
         'My\Custom\Interface\To\Auto\Tag':
-            - my_custom.tag
-            - [ my_custom.tag_with_attributes, [ attribute: value ] ]
+            - 'my_custom.tag'
+            - [ 'my_custom.tag_with_attributes', [ attribute: 'value' ] ]
 ```
 
 ## Credits
 
-This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and is sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+This bundle is brought to you by [Kévin Dunglas](https://dunglas.fr) and [awesome contributors](https://github.com/dunglas/DunglasActionBundle/graphs/contributors).
+Sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).

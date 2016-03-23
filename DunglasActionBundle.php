@@ -9,8 +9,6 @@
 
 namespace Dunglas\ActionBundle;
 
-use Dunglas\ActionBundle\DependencyInjection\CompilerPass\RegisterCompilerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -18,17 +16,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 final class DunglasActionBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        $passConfig = $container->getCompilerPassConfig();
-
-        $passes = $passConfig->getBeforeOptimizationPasses();
-
-        // This pass must be executed before AddConsoleCommandPass from the FrameworkBundle
-        array_unshift($passes, new RegisterCompilerPass());
-        $passConfig->setBeforeOptimizationPasses($passes);
-    }
 }

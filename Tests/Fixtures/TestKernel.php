@@ -45,8 +45,8 @@ final class TestKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'controller.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
-        $routes->add('/isolated', 'controller.Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
+        $routes->add('/', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction:__invoke', 'dummy');
+        $routes->add('/isolated', 'Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction:__invoke', 'isolated');
 
         // Use the @Route annotation
         $routes->import('@TestBundle/Action/', '/', 'annotation');
@@ -68,12 +68,15 @@ final class TestKernel extends Kernel
 
         $c->loadFromExtension('dunglas_action', [
             'directories' => [
-                'controller' => ['TestBundle/Controller', '*Bundle/Action', 'IsolatedAction', 'NotExistingDirectory'],
-                'command' => ['*Bundle/Command'],
-                'event_subscriber' => ['*Bundle/EventSubscriber'],
+                'TestBundle/Controller',
+                '*Bundle/Action',
+                'IsolatedAction',
+                'NotExistingDirectory',
+                '*Bundle/Command',
+                '*Bundle/EventSubscriber',
             ],
         ]);
 
-        $c->register('controller.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
+        $c->register('Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
     }
 }

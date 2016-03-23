@@ -9,7 +9,7 @@
         <service id="dunglas_action.routing.loader.annot_dir" class="Dunglas\ActionBundle\Routing\AnnotationDirectoryLoader" public="false">
             <argument type="service" id="file_locator" />
             <argument type="service" id="dunglas_action.routing.loader.annot_class" />
-            <argument>%dunglas_action.scanned_directories%</argument>
+            <argument>%dunglas_action.directories%</argument>
 
             <tag name="routing.loader" />
         </service>
@@ -17,7 +17,7 @@
         <service id="dunglas_action.routing.loader.annot_file" class="Dunglas\ActionBundle\Routing\AnnotationFileLoader" public="false">
             <argument type="service" id="file_locator" />
             <argument type="service" id="dunglas_action.routing.loader.annot_class" />
-            <argument>%dunglas_action.scanned_directories%</argument>
+            <argument>%dunglas_action.directories%</argument>
 
             <tag name="routing.loader" />
         </service>
