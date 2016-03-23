@@ -71,7 +71,7 @@ final class RegisterCompilerPass implements CompilerPassInterface
         try {
             $finder->in($directory)->files()->name('*.php');
         } catch (\InvalidArgumentException $e) {
-            return [];
+            return [[], []];
         }
 
         foreach ($finder as $file) {
