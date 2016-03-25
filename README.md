@@ -56,7 +56,7 @@ If you don't want to use annotations but prefer raw YAML, use the following synt
 ```yaml
 foo:
     path:      /foo/{bar}
-    defaults:  { _controller: 'Path\To\Your\Action:__invoke' } # this is the name of the autoregistered service corresponding to this controller
+    defaults:  { _controller: 'AppBundle\Action\Homepage:__invoke' } # this is the name of the autoregistered service corresponding to this action
 ```
 
 ## Usage
@@ -76,7 +76,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class MyAction
+class Homepage
 {
     private $router;
     private $twig;
@@ -109,19 +109,19 @@ class MyAction
 }
 ```
 
-Alternatively, you can create typical controller class with several `*Action` methods in the `Controller` directory of your
-bundle, it will be autowired the same way.
+Alternatively, you can create a typical Symfony controller class with several `*Action` methods in the `Controller` directory
+of your bundle, it will be autowired the same way.
 
 **There is no step 2! You're already done.**
 
 All classes inside `Action/` and `Controller/` directories of your project bundles are automatically registered as services.
 By convention, the service name is the Fully Qualified Name of the class.
 
-For instance, the class in the example is automatically registered with the name `AppBundle\Action\MyAction`.
+For instance, the class in the example is automatically registered with the name `AppBundle\Action\Homepage`.
 
 There are other classes/tags supported:
 
-| Class Name               | Tag                     | Directory
+| Class Name               | Tag automatically added | Directory
 | ------------------------ | ----------------------- | ---------
 | Command                  | console.command         | Command
 | EventSubscriberInterface | kernel.event_subscriber | EventSubscriber
@@ -189,7 +189,7 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'AppBundle\Action\MyAction:__invoke', 'my_route');
+        $routes->add('/', 'AppBundle\Action\Homepage:__invoke', 'my_route');
         // Alternatively, use @Route annotations
         // $routes->import('@AppBundle/Action/', '/', 'annotation');
     }
