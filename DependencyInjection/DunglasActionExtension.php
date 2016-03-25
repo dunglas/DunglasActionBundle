@@ -32,21 +32,24 @@ class DunglasActionExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $kernelRootDir = $container->getParameter('kernel.root_dir');
 
-        $scannedDirectories = [];
+        $directoryList = [];
         foreach ($config['directories'] as $pattern) {
             list($classes, $directories) = $this->getClasses($kernelRootDir.DIRECTORY_SEPARATOR.$pattern);
-            $scannedDirectories = array_merge($scannedDirectories, $directories);
+            $directoryList = array_merge($directoryList, $directories);
 
             foreach ($classes as $class) {
                 $this->registerClass($container, $class, $config['tags']);
             }
         }
 
-        foreach ($scannedDirectories as $directory => $v) {
+        $directories = [];
+        foreach ($directoryList as $directory => $v) {
+            $directory = realpath($directory);
             $container->addResource(new DirectoryResource($directory));
+            $directories[$directory] = true;
         }
 
-        $container->setParameter('dunglas_action.directories', $scannedDirectories);
+        $container->setParameter('dunglas_action.directories', $directories);
 
         if (class_exists('Symfony\Component\Routing\Loader\AnnotationDirectoryLoader')) {
             $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -64,7 +67,7 @@ class DunglasActionExtension extends Extension
     private function getClasses($directory)
     {
         $classes = [];
-        $scannedDirectories = [];
+        $directoryList = [];
         $includedFiles = [];
 
         $finder = new Finder();
@@ -75,7 +78,7 @@ class DunglasActionExtension extends Extension
         }
 
         foreach ($finder as $file) {
-            $scannedDirectories[$file->getPath()] = true;
+            $directoryList[$file->getPath()] = true;
             $sourceFile = $file->getRealpath();
             if (!preg_match('(^phar:)i', $sourceFile)) {
                 $sourceFile = realpath($sourceFile);
@@ -99,7 +102,7 @@ class DunglasActionExtension extends Extension
             }
         }
 
-        return [array_keys($classes), $scannedDirectories];
+        return [array_keys($classes), $directoryList];
     }
 
     /**
