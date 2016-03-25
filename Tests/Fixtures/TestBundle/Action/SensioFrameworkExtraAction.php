@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route(service="action.Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\SensioFrameworkExtraAction")
+ * @Route(service="Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\SensioFrameworkExtraAction")
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */

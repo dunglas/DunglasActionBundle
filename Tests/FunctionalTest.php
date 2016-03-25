@@ -26,7 +26,7 @@ class FunctionalTest extends WebTestCase
         $this->assertSame('Here we are!', $crawler->text());
     }
 
-    public function testSensioFrameworkExtraActionAction()
+    public function testSensioFrameworkExtraAction()
     {
         $client = static::createClient();
 

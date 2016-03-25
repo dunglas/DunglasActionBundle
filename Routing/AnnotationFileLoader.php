@@ -20,13 +20,13 @@ use Symfony\Component\Routing\Loader\AnnotationFileLoader as BaseAnnotationFileL
  */
 class AnnotationFileLoader extends BaseAnnotationFileLoader
 {
-    private $scannedDirectories;
+    private $directories;
 
-    public function __construct(FileLocatorInterface $locator, BaseAnnotationClassLoader $loader, array $scannedDirectories)
+    public function __construct(FileLocatorInterface $locator, BaseAnnotationClassLoader $loader, array $directories)
     {
         parent::__construct($locator, $loader);
 
-        $this->scannedDirectories = $scannedDirectories;
+        $this->directories = $directories;
     }
 
     /**
@@ -44,6 +44,6 @@ class AnnotationFileLoader extends BaseAnnotationFileLoader
             return false;
         }
 
-        return isset($this->scannedDirectories[dirname($path)]);
+        return isset($this->directories[dirname($path)]);
     }
 }
