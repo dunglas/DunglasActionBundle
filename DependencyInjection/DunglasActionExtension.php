@@ -11,8 +11,10 @@ namespace Dunglas\ActionBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\DirectoryResource;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -120,6 +122,11 @@ class DunglasActionExtension extends Extension
 
         $definition = $container->register($className, $className);
         $definition->setAutowired(true);
+
+        // Inject the container if applicable
+        if (is_a($className, ContainerAwareInterface::class, true)) {
+            $definition->addMethodCall('setContainer', [new Reference('service_container')]);
+        }
 
         foreach ($tags as $tagClassName => $classTags) {
             if (!is_a($className, $tagClassName, true)) {
