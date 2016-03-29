@@ -26,6 +26,6 @@ class HelloController extends Controller
      */
     public function testAction()
     {
-        return new Response('Legacy here.');
+        return new Response($this->get('router')->generate('isolated'));
     }
 }

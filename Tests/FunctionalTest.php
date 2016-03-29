@@ -66,7 +66,7 @@ class FunctionalTest extends WebTestCase
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/legacy');
-        $this->assertSame('Legacy here.', $crawler->text());
+        $this->assertSame('/isolated', $crawler->text());
     }
 
     public function testIsolated()
