@@ -56,7 +56,7 @@ If you don't want to use annotations but prefer raw YAML, use the following synt
 ```yaml
 foo:
     path:      /foo/{bar}
-    defaults:  { _controller: 'AppBundle\Action\Homepage:__invoke' } # this is the name of the autoregistered service corresponding to this action
+    defaults:  { _controller: 'AppBundle\Action\Homepage' } # this is the name of the autoregistered service corresponding to this action
 ```
 
 ## Usage
@@ -189,7 +189,7 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'AppBundle\Action\Homepage:__invoke', 'my_route');
+        $routes->add('/', 'AppBundle\Action\Homepage', 'my_route');
         // Alternatively, use @Route annotations
         // $routes->import('@AppBundle/Action/', '/', 'annotation');
     }
