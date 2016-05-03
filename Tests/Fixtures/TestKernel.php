@@ -45,8 +45,8 @@ final class TestKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction:__invoke', 'dummy');
-        $routes->add('/isolated', 'Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction:__invoke', 'isolated');
+        $routes->add('/', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
+        $routes->add('/isolated', 'Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
 
         // Use the @Route annotation
         $routes->import('@TestBundle/Action/', '/', 'annotation');
