@@ -9,12 +9,9 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -53,11 +50,6 @@ class DunglasActionExtension extends Extension
         }
 
         $container->setParameter('dunglas_action.directories', $directories);
-
-        if (class_exists('Symfony\Component\Routing\Loader\AnnotationDirectoryLoader') && !method_exists(Controller::class, 'json')) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('routing.xml');
-        }
     }
 
     /**
