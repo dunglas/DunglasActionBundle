@@ -20,7 +20,6 @@ matrix:
         - php: 7.0
 
 before_install:
-    - composer self-update
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
 
 install:
