@@ -45,10 +45,14 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('class')
                     ->prototype('array')
                         // Converts 'console.command' to ['console.command']
-                        ->beforeNormalization()->ifString()->then(function ($v) { return [$v]; })->end()
+                        ->beforeNormalization()->ifString()->then(function ($v) {
+                            return [$v];
+                        })->end()
                         ->prototype('array')
                             // Converts 'console.command' to ['console.command', []]
-                            ->beforeNormalization()->ifString()->then(function ($v) { return [$v, []]; })->end()
+                            ->beforeNormalization()->ifString()->then(function ($v) {
+                                return [$v, []];
+                            })->end()
                             ->validate()
                                 ->ifTrue(function ($v) {
                                     return count($v) !== 2 || !is_string($v[0]) || !is_array($v[1]);
