@@ -45,7 +45,7 @@ class DunglasActionExtension extends Extension
         $directories = [];
         foreach ($directoryList as $directory => $v) {
             $directory = realpath($directory);
-            $container->addResource(new DirectoryResource($directory));
+            $container->addResource(new DirectoryResource($directory, '/\.php$/'));
             $directories[$directory] = true;
         }
 
