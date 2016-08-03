@@ -212,10 +212,7 @@ Want to see a more advanced example? [Checkout our test micro kernel](Tests/Fixt
 
 dunglas_action:
     directories: # List of directories relative to the kernel root directory containing classes to auto-register.
-        - '../src/*Bundle/Controller'
-        - '../src/*Bundle/Action'
-        - '../src/*Bundle/Command'
-        - '../src/*Bundle/EventSubscriber'
+        - '../src/*Bundle/{Controller,Action,Command,EventSubscriber}'
         # This one is not registered by default
         - '../src/*Bundle/My/Uncommon/Directory'
     tags:
