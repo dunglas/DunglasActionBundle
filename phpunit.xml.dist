@@ -9,6 +9,8 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
+
+        <server name="KERNEL_DIR" value="Tests/Fixtures/" />
     </php>
 
     <testsuites>
@@ -16,10 +18,6 @@
             <directory>Tests</directory>
         </testsuite>
     </testsuites>
-
-    <php>
-        <server name="KERNEL_DIR" value="Tests/Fixtures/" />
-    </php>
 
     <filter>
         <whitelist>

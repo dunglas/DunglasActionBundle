@@ -5,25 +5,52 @@ cache:
     - $HOME/.composer/cache
 
 php:
-    - 5.5
-    - 5.6
-    - 7.0
+    - "5.5"
+    - "5.6"
+    - "7.0"
+    - "7.1"
+    - nightly
     - hhvm
 
 matrix:
     fast_finish: true
     include:
-        - php: 7.0
-          env: SYMFONY_VERSION=2.8.*
-        - php: 7.0
-          env: SYMFONY_VERSION=3.0.*
-        - php: 7.0
+        - php: "5.5"
+          env:
+              - "SYMFONY_VERSION=~2.8.0"
+              - "COMPOSER_FLAGS=--prefer-lowest"
+        - php: "7.0"
+          env: "SYMFONY_VERSION=~3.0.0"
+        - php: "7.0"
+          env: "SYMFONY_VERSION=~3.1.0"
+        - php: "7.0"
+          env: "SYMFONY_VERSION=~3.2.0@dev"
+    allow_failures:
+        - php: nightly
+        - env: "SYMFONY_VERSION=~3.2.0@dev"
 
 before_install:
+    # From https://github.com/travis-ci/travis-ci/issues/5780#issuecomment-196308406
+    - |
+      XDEBUG_INI="/home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini"
+      if [ ! -f "$XDEBUG_INI" ]; then
+          return
+      fi
+      function composer()
+      {
+          mv $XDEBUG_INI ~/xdebug.ini
+          COMPOSER="$(which composer)"
+          $COMPOSER "$@"
+          STATUS=$?
+          mv ~/xdebug.ini $XDEBUG_INI
+
+          return $STATUS
+      }
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+    - if [ "$TRAVIS_PHP_VERSION" = "nightly" ]; then COMPOSER_FLAGS="$COMPOSER_FLAGS --ignore-platform-reqs"; fi;
 
 install:
-    - composer update --no-interaction --prefer-dist
+    - composer update $COMPOSER_FLAGS --no-interaction --prefer-dist
 
 script:
     - phpunit
