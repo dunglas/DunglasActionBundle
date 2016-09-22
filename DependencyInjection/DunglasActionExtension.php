@@ -34,7 +34,8 @@ class DunglasActionExtension extends Extension
 
         $directoryList = [];
         foreach ($config['directories'] as $pattern) {
-            list($classes, $directories) = $this->getClasses($kernelRootDir.DIRECTORY_SEPARATOR.$pattern);
+            $directory = (DIRECTORY_SEPARATOR !== substr($pattern, 0, 1)) ? $kernelRootDir.DIRECTORY_SEPARATOR.$pattern : $pattern;
+            list($classes, $directories) = $this->getClasses($directory);
             $directoryList = array_merge($directoryList, $directories);
 
             foreach ($classes as $class) {
