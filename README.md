@@ -167,6 +167,7 @@ Here we go:
 ```php
 // MyMicroKernel.php
 
+use AppBundle\Action\Homepage;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -189,7 +190,7 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'AppBundle\Action\Homepage', 'my_route');
+        $routes->add('/', Homepage:class, 'my_route');
         // Alternatively, use @Route annotations
         // $routes->import('@AppBundle/Action/', '/', 'annotation');
     }
