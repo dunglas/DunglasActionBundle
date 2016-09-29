@@ -190,7 +190,7 @@ final class MyMicroKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', Homepage:class, 'my_route');
+        $routes->add('/', Homepage::class, 'my_route');
         // Alternatively, use @Route annotations
         // $routes->import('@AppBundle/Action/', '/', 'annotation');
     }
