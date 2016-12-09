@@ -130,7 +130,11 @@ class DunglasActionExtension extends Extension
         }
 
         $definition = $container->register($className, $className);
-        $definition->setAutowired(true);
+        if (method_exists($definition, 'setAutowiredMethods')) {
+            $definition->setAutowiredMethods(['__construct', 'set*']);
+        } else {
+            $definition->setAutowired(true);
+        }
 
         // Inject the container if applicable
         if (is_a($className, ContainerAwareInterface::class, true)) {

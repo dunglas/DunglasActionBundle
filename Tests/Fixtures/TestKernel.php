@@ -8,7 +8,11 @@
  */
 
 use Dunglas\ActionBundle\DunglasActionBundle;
+use Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction;
 use Dunglas\ActionBundle\Tests\Fixtures\NotScannedBundle\NotScannedBundle;
+use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction;
+use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction;
+use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\SetterAction;
 use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\TestBundle;
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -45,8 +49,9 @@ final class TestKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         // Specify explicitly the controller
-        $routes->add('/', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\DummyAction', 'dummy');
-        $routes->add('/isolated', 'Dunglas\ActionBundle\Tests\Fixtures\IsolatedAction\AnIsolatedAction', 'isolated');
+        $routes->add('/', DummyAction::class, 'dummy');
+        $routes->add('/isolated', AnIsolatedAction::class, 'isolated');
+        $routes->add('/setter', SetterAction::class, 'setter');
 
         // Use the @Route annotation
         $routes->import('@TestBundle/Action/', '/', 'annotation');
@@ -78,6 +83,6 @@ final class TestKernel extends Kernel
             ],
         ]);
 
-        $c->register('Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction', 'Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Action\OverrideAction');
+        $c->register(OverrideAction::class, OverrideAction::class);
     }
 }

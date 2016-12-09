@@ -11,6 +11,7 @@ namespace Dunglas\ActionBundle\Tests;
 
 use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Twig\DummyExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -96,5 +97,17 @@ class FunctionalTest extends WebTestCase
     {
         static::bootKernel();
         $this->assertTrue(static::$kernel->getContainer()->has(DummyExtension::class));
+    }
+
+    public function testSetterAutowiring()
+    {
+        if (!method_exists(Definition::class, 'setAutowiredMethods')) {
+            $this->markTestSkipped('Setter autowiring requires Symfony 3.3+');
+        }
+
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/setter');
+        $this->assertSame('setter', $crawler->text());
     }
 }

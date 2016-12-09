@@ -16,8 +16,9 @@ matrix:
     fast_finish: true
     include:
         - php: '7.1'
-          env:
-              - 'COMPOSER_FLAGS=--prefer-lowest'
+          env: 'COMPOSER_FLAGS=--prefer-lowest'
+        - php: '7.1'
+          env: 'SYMFONY_VERSION=^3.3@dev'
     allow_failures:
         - php: nightly
         - env: 'SYMFONY_VERSION=^3.3@dev'
@@ -25,6 +26,7 @@ matrix:
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
     - if [ "$TRAVIS_PHP_VERSION" = "nightly" ]; then COMPOSER_FLAGS="$COMPOSER_FLAGS --ignore-platform-reqs"; fi;
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
 
 install:
     - composer update $COMPOSER_FLAGS --no-interaction --prefer-dist --no-progress --no-suggest --ansi
