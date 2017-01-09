@@ -9,6 +9,7 @@
 
 namespace Dunglas\ActionBundle\Tests;
 
+use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Twig\DummyExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -89,5 +90,11 @@ class FunctionalTest extends WebTestCase
 
         $crawler = $client->request('GET', '/traditional');
         $this->assertSame('traditional', $crawler->text());
+    }
+
+    public function testTwigExtension()
+    {
+        static::bootKernel();
+        $this->assertTrue(static::$kernel->getContainer()->has(DummyExtension::class));
     }
 }

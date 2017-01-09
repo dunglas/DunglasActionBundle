@@ -34,7 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->info('List of directories relative to the kernel root directory containing classes.')
                     ->prototype('scalar')->end()
                     ->defaultValue([
-                        '../src/*Bundle/{Controller,Action,Command,EventSubscriber}',
+                        '../src/*Bundle/{Action,Command,Controller,EventSubscriber,Twig}',
                     ])
                 ->end()
                 ->arrayNode('tags')
@@ -62,6 +62,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([
                         Command::class => [['console.command', []]],
                         EventSubscriberInterface::class => [['kernel.event_subscriber', []]],
+                        \Twig_ExtensionInterface::class => [['twig.extension', []]],
                     ])
                 ->end()
             ->end()
