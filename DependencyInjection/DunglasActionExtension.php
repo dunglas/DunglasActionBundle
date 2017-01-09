@@ -38,7 +38,7 @@ class DunglasActionExtension extends Extension
             $directoryList = array_merge($directoryList, $directories);
 
             foreach ($classes as $class) {
-                $this->registerClass($container, $class, $config['tags']);
+                $this->registerClass($container, $class, $config['tags'], $config['methods']);
             }
         }
 
@@ -122,8 +122,9 @@ class DunglasActionExtension extends Extension
      * @param ContainerBuilder $container
      * @param string           $className
      * @param array            $tags
+     * @param string[]         $methods
      */
-    private function registerClass(ContainerBuilder $container, $className, array $tags)
+    private function registerClass(ContainerBuilder $container, $className, array $tags, array $methods)
     {
         if ($container->has($className)) {
             return;
@@ -131,7 +132,7 @@ class DunglasActionExtension extends Extension
 
         $definition = $container->register($className, $className);
         if (method_exists($definition, 'setAutowiredMethods')) {
-            $definition->setAutowiredMethods(['__construct', 'set*']);
+            $definition->setAutowiredMethods($methods);
         } else {
             $definition->setAutowired(true);
         }
