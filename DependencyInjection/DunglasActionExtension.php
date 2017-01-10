@@ -61,8 +61,11 @@ class DunglasActionExtension extends Extension
     private function getDirectory($kernelRootDir, $pattern)
     {
         $firstCharacter = substr($pattern, 0, 1);
+        if ('/' === $firstCharacter || DIRECTORY_SEPARATOR === $firstCharacter) {
+            return $pattern;
+        }
 
-        return ('/' !== $firstCharacter && DIRECTORY_SEPARATOR !== $firstCharacter) ? $kernelRootDir.DIRECTORY_SEPARATOR.$pattern : $pattern;
+        return $kernelRootDir.DIRECTORY_SEPARATOR.$pattern;
     }
 
     /**
