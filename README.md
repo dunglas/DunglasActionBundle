@@ -125,6 +125,7 @@ There are other classes/tags supported:
 | ------------------------ | ----------------------- | ---------
 | Command                  | console.command         | Command
 | EventSubscriberInterface | kernel.event_subscriber | EventSubscriber
+| Twig_ExtensionInterface  | twig.extension          | Twig
 
 Thanks to the [autowiring feature](http://symfony.com/blog/new-in-symfony-2-8-service-auto-wiring) of the Dependency Injection
 Component, you can just typehint dependencies you need in the constructor, they will be automatically initialized and injected.
