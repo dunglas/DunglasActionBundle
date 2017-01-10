@@ -138,15 +138,14 @@ Service definition can easily be customized by explicitly defining a service nam
 services:
     # This is a custom service definition
     'AppBundle\Action\MyAction':
-        class: 'AppBundle\Action\MyAction'
         arguments: [ '@router', '@twig' ]
 
     'AppBundle\Command\MyCommand':
-        class: 'AppBundle\Command\MyCommand'
         arguments: [ '@router', '@twig' ]
         tags:
             - { name: console.command }
 
+    # With Symfony < 3.3
     'AppBundle\EventSubscriber\MySubscriber':
         class: 'AppBundle\EventSubscriber\MySubscriber'
         tags:
