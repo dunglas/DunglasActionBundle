@@ -30,12 +30,15 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->root('dunglas_action')
             ->fixXmlConfig('directory', 'directories')
             ->children()
+                ->arrayNode('methods')
+                    ->info('The list of methods to autowire.')
+                    ->prototype('scalar')->end()
+                    ->defaultValue(['__construct', 'get*', 'set*'])
+                ->end()
                 ->arrayNode('directories')
                     ->info('List of directories relative to the kernel root directory containing classes.')
                     ->prototype('scalar')->end()
-                    ->defaultValue([
-                        '../src/*Bundle/{Action,Command,Controller,EventSubscriber,Twig}',
-                    ])
+                    ->defaultValue(['../src/*Bundle/{Action,Command,Controller,EventSubscriber,Twig}'])
                 ->end()
                 ->arrayNode('tags')
                     ->info('List of tags to add when implementing the corresponding class.')

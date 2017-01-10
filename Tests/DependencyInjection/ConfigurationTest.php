@@ -60,7 +60,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $processor = new Processor();
 
-        $config = $processor->processConfiguration(new Configuration(true), [[
+        $processor->processConfiguration(new Configuration(true), [[
             'tags' => [__CLASS__ => [['console.command', 'invalid']]],
         ]]);
     }
