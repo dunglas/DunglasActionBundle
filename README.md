@@ -221,7 +221,7 @@ dunglas_action:
         'Symfony\Component\EventDispatcher\EventSubscriberInterface': kernel.event_subscriber
         'My\Custom\Interface\To\Auto\Tag':
             - 'my_custom.tag'
-            - [ 'my_custom.tag_with_attributes', [ attribute: 'value' ] ]
+            - [ 'my_custom.tag_with_attributes', { attribute: 'value' } ]
 ```
 
 ## Credits
