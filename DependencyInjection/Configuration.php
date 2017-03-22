@@ -43,7 +43,7 @@ class Configuration implements ConfigurationInterface
                         '../src/*Bundle/Command',
                         '../src/*Bundle/Controller',
                         '../src/*Bundle/EventSubscriber',
-                        '../src/*Bundle/Twig'
+                        '../src/*Bundle/Twig',
                     ])
                 ->end()
                 ->arrayNode('tags')
