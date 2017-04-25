@@ -108,7 +108,7 @@ class DunglasActionExtension extends Extension
                 continue;
             }
 
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && $reflectionClass->isAnonymous()) {
+            if (method_exists($reflectionClass, 'isAnonymous') && $reflectionClass->isAnonymous()) {
                 continue;
             }
 

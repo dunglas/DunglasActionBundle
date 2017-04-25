@@ -86,25 +86,17 @@ class FunctionalTest extends WebTestCase
         $this->assertFalse(static::$kernel->getContainer()->has('dunglas\actionBundle\tests\fixtures\testbundle\action\abstractaction'));
     }
 
+    /**
+     * @requires PHP 7.0
+     */
     public function testAnonymousClassNotRegistered()
     {
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $hasFailed = null;
-            try {
-                static::bootKernel();
-                $this->assertTrue(static::$kernel->getContainer()->has('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction'));
-                /** @var AnAnonymousAction $action */
-                $action = static::$kernel->getContainer()->get('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction');
-                $this->assertEquals('Ho hi', $action());
-                $hasFailed = false;
-            } catch (\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
-                $hasFailed = true;
-            }
+        static::bootKernel();
+        $this->assertTrue(static::$kernel->getContainer()->has('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction'));
+        /** @var AnAnonymousAction $action */
+        $action = static::$kernel->getContainer()->get('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction');
+        $this->assertEquals('Ho hi', $action());
 
-            $this->assertFalse($hasFailed);
-        } else {
-            $this->markTestSkipped('PHP7+ is required to test anonymous classes');
-        }
     }
 
     public function testCanAccessTraditionalController()
