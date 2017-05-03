@@ -38,7 +38,13 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('directories')
                     ->info('List of directories relative to the kernel root directory containing classes.')
                     ->prototype('scalar')->end()
-                    ->defaultValue(['../src/*Bundle/{Action,Command,Controller,EventSubscriber,Twig}'])
+                    ->defaultValue([
+                        '../src/*Bundle/Action',
+                        '../src/*Bundle/Command',
+                        '../src/*Bundle/Controller',
+                        '../src/*Bundle/EventSubscriber',
+                        '../src/*Bundle/Twig',
+                    ])
                 ->end()
                 ->arrayNode('tags')
                     ->info('List of tags to add when implementing the corresponding class.')
