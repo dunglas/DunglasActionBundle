@@ -83,6 +83,14 @@ final class TestKernel extends Kernel
             ],
         ]);
 
+        if (method_exists(ReflectionClass::class, 'isAnonymous')) {
+            $c->loadFromExtension('dunglas_action', [
+                'directories' => [
+                    'AnonymousAction',
+                ],
+            ]);
+        }
+
         $c->register(OverrideAction::class, OverrideAction::class);
     }
 }

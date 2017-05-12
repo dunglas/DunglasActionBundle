@@ -9,6 +9,7 @@
 
 namespace Dunglas\ActionBundle\Tests;
 
+use Dunglas\ActionBundle\Tests\Fixtures\AnonymousAction\AnAnonymousAction;
 use Dunglas\ActionBundle\Tests\Fixtures\TestBundle\Twig\DummyExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Definition;
@@ -83,6 +84,19 @@ class FunctionalTest extends WebTestCase
     {
         static::bootKernel();
         $this->assertFalse(static::$kernel->getContainer()->has('dunglas\actionBundle\tests\fixtures\testbundle\action\abstractaction'));
+    }
+
+    /**
+     * @requires PHP 7.0
+     */
+    public function testAnonymousClassNotRegistered()
+    {
+        static::bootKernel();
+        $this->assertTrue(static::$kernel->getContainer()->has('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction'));
+        /** @var AnAnonymousAction $action */
+        $action = static::$kernel->getContainer()->get('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction');
+        $this->assertEquals('Ho hi', $action());
+
     }
 
     public function testCanAccessTraditionalController()

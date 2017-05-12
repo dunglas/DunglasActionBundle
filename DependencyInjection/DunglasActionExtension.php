@@ -108,6 +108,10 @@ class DunglasActionExtension extends Extension
                 continue;
             }
 
+            if (method_exists($reflectionClass, 'isAnonymous') && $reflectionClass->isAnonymous()) {
+                continue;
+            }
+
             if (isset($includedFiles[$sourceFile])) {
                 $classes[$className] = true;
             }
