@@ -9,6 +9,7 @@
 
 namespace Dunglas\ActionBundle\DependencyInjection;
 
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -144,6 +145,11 @@ class DunglasActionExtension extends Extension
         // Inject the container if applicable
         if (is_a($className, ContainerAwareInterface::class, true)) {
             $definition->addMethodCall('setContainer', [new Reference('service_container')]);
+        }
+
+        // Inject the logger if applicable
+        if (is_a($className, LoggerAwareInterface::class, true)) {
+            $definition->addMethodCall('setLogger', [new Reference('logger')]);
         }
 
         foreach ($tags as $tagClassName => $classTags) {
