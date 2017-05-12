@@ -96,7 +96,6 @@ class FunctionalTest extends WebTestCase
         /** @var AnAnonymousAction $action */
         $action = static::$kernel->getContainer()->get('dunglas\actionBundle\tests\fixtures\anonymousaction\ananonymousaction');
         $this->assertEquals('Ho hi', $action());
-
     }
 
     public function testCanAccessTraditionalController()
