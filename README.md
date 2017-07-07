@@ -22,6 +22,12 @@ and **easy to unit test** classes.
 
 See https://github.com/symfony/symfony/pull/16863#issuecomment-162221353 for the history behind this bundle.
 
+## Note for Symfony >=3.3 users
+
+If you use Symfony at version 3.3 or superior, you do not need to use this bundle as all the features were ported
+in Symfony. You can learn more about it in the [Symfony blog](http://symfony.com/blog/the-new-symfony-3-3-service-configuration-changes-explained)
+or in the [Symfony documentation](http://symfony.com/doc/current/service_container/3.3-di-changes.html).
+
 ## Installation
 
 Use [Composer](https://getcomposer.org/) to install this bundle:
